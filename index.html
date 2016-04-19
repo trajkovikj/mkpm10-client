@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <link rel="stylesheet" type="text/css" href="./main.css" />
+  </head>
+
+  <body>
+
+    <div id="sidebar">
+
+      <button id="open-close">&lt</button>
+
+      <div id="logo">
+        <span id="title">ФИНКИ</span>
+        <br>
+        <span id="subtitle">еко-информатика</span>
+      </div>
+      
+      <div id="radio-map-type">
+        <input type="radio" name="map-type" value="0" checked> Средна вредност<br>
+        <input type="radio" name="map-type" value="1"> Приказ по мерна станица<br>
+        <input type="radio" name="map-type" value="2"> Приказ преку жаришта<br>
+      </div>
+
+      <select id="year" class="select" name="year" form="dateInterval"></select>
+      <select id="mounth" class="select" name="mounth" form="dateInterval"></select>
+      <button id="submit" onclick="requestMerenja()">Превземи</button>
+
+      <div id="pm-display">
+        <label id="pm-label">PM10 :</label>
+        <span id="pm-value"></span>
+      </div>
+
+      <div id="date-scroller">
+        <button onclick="prevMerenjeButton()">Prev</button>
+        <button onclick="nextMerenjeButton()">Next</button>
+      </div>
+     
+
+    </div>
+
+    <div id="slider"></div>
+
+    <div id="floating-panel">
+      <button onclick="toggleRectangle()">Toggle Recktangle</button>
+      <button onclick="toggleMarkers()">Toggle Markers</button>
+      <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+      <button onclick="changeGradient()">Change gradient</button>
+      <button onclick="changeRadius()">Change radius</button>
+      <button onclick="changeOpacity()">Change opacity</button>
+    </div>
+
+    <div id="map"></div>
+
+    
+    <!-- <script type="text/javascript" src="./marker-test.js"></script> -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC484gyJTuQAL1Pvgfd22MGViXMa_zmW00&libraries=visualization&callback=initMap">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+    <script type="text/javascript" src="./requests.js"></script>
+    <script type="text/javascript" src="./dataProcessor.js"></script>
+    <script type="text/javascript" src="./init.js"></script>
+    <script type="text/javascript" src="./map-setup.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+  </body>
+</html>

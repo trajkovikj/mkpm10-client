@@ -1,0 +1,141 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#floating-panel {
+  background-color: #fff;
+  border: 1px solid #999;
+  left: 25%;
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  z-index: 5;
+}
+
+#sidebar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 20%;
+  height: 100%;
+  z-index: 5;
+  background-color: #9E9E9E;
+  opacity: 0.8;
+  /*padding: 5px;*/
+  box-shadow: 5px 0px 20px #424242;
+  /*border: 1px solid #424242;*/
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  /*padding-top: 5%;*/
+  /*padding-left: 10px;*/
+}
+
+#sidebar #open-close {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  font-size: 1.1em;
+}
+
+#sidebar #logo {
+  margin-top: 7%;
+  margin-bottom: 20%;
+}
+
+#sidebar #logo #title {
+  font-size: 2em;
+  font-weight: 600;
+  color: #333;
+  /*color: #4169E1;*/
+}
+
+#sidebar #logo #subtitle {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+}
+
+
+#sidebar #radio-map-type {
+  margin-left: 5%;
+  margin-bottom: 5%;
+  text-align: left;
+  font-size: 1em;
+  font-weight: 400;
+  color: #333;
+}
+
+
+#sidebar .select {
+  width: 90%;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+}
+
+#sidebar button#submit {
+  width: 90%;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+}
+
+#sidebar #pm-display {
+  margin-top: 10%;
+  margin-left: 5%; 
+  width: 90%;
+  background: white;
+  overflow: auto;
+}
+
+#sidebar #pm-display label {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+  float: left;
+  margin-left: 3%;
+}
+
+#sidebar #pm-display span {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+  float: left;
+  margin-left: 3%;
+  text-align: left;
+}
+
+#sidebar #date-scroller {
+  margin-top: 2%;
+  margin-left: 5%; 
+  width: 90%;
+  clear: both;
+}
+
+#sidebar #date-scroller button {
+  width: 49%;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+}
