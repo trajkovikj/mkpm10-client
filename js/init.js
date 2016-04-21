@@ -1,12 +1,11 @@
 var map, heatmap, rectangle;
-var requestedMerenja, allMounthsByYears;
+var requestedMerenja, allMonthsByYears;
 var year;
 var yearSelector = $( "#year" );
-var mounthSelector = $( "#mounth" );
-// var requestedMerenja, requestedMerenjaIndex = 0;
+var monthSelector = $( "#month" );
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    googleVariables.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: {lat: 41.999218, lng: 21.429010},
         mapTypeId: google.maps.MapTypeId.SATELLITE,
@@ -18,7 +17,7 @@ function initMap() {
 
     // north-west : 42.040027, 21.335283
     // south-east : 41.958893, 21.512438
-    rectangle = new google.maps.Rectangle({
+    googleVariables.rectangle = new google.maps.Rectangle({
       strokeColor: '#FFFFFF',
       strokeOpacity: 0.8,
       strokeWeight: 2,
@@ -33,7 +32,7 @@ function initMap() {
       }
     });
 
-    heatmap = new google.maps.visualization.HeatmapLayer({
+    googleVariables.heatmap = new google.maps.visualization.HeatmapLayer({
       data: getSkPoints(),
       map: map,
       maxIntensity : 150,
@@ -53,25 +52,25 @@ function initMap() {
 
 function initSelectors() {
     var i, j;
-    var initMounths, initYears = [];
+    var initMonths, initYears = [];
 
-    allMounthsByYears = requests.getAllMounthsByYears();
+    allMonthsByYears = requests.getAllMonthsByYears();
 
-    for(j in allMounthsByYears) {
-        initYears.push(allMounthsByYears[j].year);
+    for(j in allMonthsByYears) {
+        initYears.push(allMonthsByYears[j].year);
     }
 
     initYearsSelector(initYears);
 
-    initMounths = allMounthsByYears[0].mounths;
-    initMounths.unshift('Сите месеци');
-    initMounthsSelector(initMounths);
+    initMonths = allMonthsByYears[0].months;
+    initMonths.unshift('Сите месеци');
+    initMonthsSelector(initMonths);
 
     yearSelector.change(function () {
         var selectedYearId = $("#year option:selected").attr("id");
-        var mounths = allMounthsByYears[selectedYearId].mounths;
-        mounths.unshift('Сите месеци');
-        initMounthsSelector(mounths);
+        var months = allMonthsByYears[selectedYearId].months;
+        months.unshift('Сите месеци');
+        initMonthsSelector(months);
     });
 
 }
@@ -86,13 +85,13 @@ function initYearsSelector (yearsArray) {
     }
 }
 
-function initMounthsSelector (mounthsArray) {
+function initMonthsSelector (monthsArray) {
     var i;
 
-    mounthSelector.html('');
+    monthSelector.html('');
 
-    for(i = 0; i < mounthsArray.length; i++) {
-        mounthSelector.append('<option id="'+ i +'" value="'+ mounthsArray[i] +'">'+ mounthsArray[i] +'</option>');
+    for(i = 0; i < monthsArray.length; i++) {
+        monthSelector.append('<option id="'+ i +'" value="'+ monthsArray[i] +'">'+ monthsArray[i] +'</option>');
     }
 }
 

@@ -14,15 +14,11 @@ function getSkPoints()
 }
 
 function toggleRectangle() {
-  rectangle.setMap(rectangle.getMap() ? null : map);
-}
-
-function toggleMarkers() {
-  // heatmap.setMap(heatmap.getMap() ? null : map);
+  googleVariables.rectangle.setMap(googleVariables.rectangle.getMap() ? null : googleVariables.map);
 }
 
 function toggleHeatmap() {
-  heatmap.setMap(heatmap.getMap() ? null : map);
+  googleVariables.heatmap.setMap(googleVariables.heatmap.getMap() ? null : googleVariables.map);
 }
 
 function changeGradient() {
@@ -42,15 +38,15 @@ function changeGradient() {
     'rgba(191, 0, 31, 1)',
     'rgba(255, 0, 0, 1)'
   ]
-  heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+  googleVariables.heatmap.set('gradient', googleVariables.heatmap.get('gradient') ? null : gradient);
 }
 
 function changeRadius() {
-  heatmap.set('radius', heatmap.get('radius') ? null : 50);
+  googleVariables.heatmap.set('radius', googleVariables.heatmap.get('radius') ? null : 50);
 }
 
 function changeOpacity() {
-  heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+  googleVariables.heatmap.set('opacity', googleVariables.heatmap.get('opacity') ? null : 0.2);
 }
 
 

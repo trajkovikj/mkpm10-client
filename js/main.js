@@ -1,20 +1,17 @@
-var openCloseSliderButton = $( "#open-close" );
-var sidebar = $("#sidebar");
-
-openCloseSliderButton.click(closeSidebar);
+selectors.openCloseSliderButton.click(closeSidebar);
 
 function openSidebar () {
-    sidebar.animate({ "left": "+=15%" }, "slow" );
-    openCloseSliderButton.html("&lt");
-    openCloseSliderButton.unbind( "click" );
-    openCloseSliderButton.click(closeSidebar);
+    selectors.sidebar.animate({ "left": "+=15%" }, "slow" );
+    selectors.openCloseSliderButton.html("&lt");
+    selectors.openCloseSliderButton.unbind("click");
+    selectors.openCloseSliderButton.click(closeSidebar);
 }
 
 function closeSidebar () {
-    sidebar.animate({ "left": "-=15%" }, "slow" );
-    openCloseSliderButton.html("&gt");
-    openCloseSliderButton.unbind( "click" );
-    openCloseSliderButton.click(openSidebar);
+    selectors.sidebar.animate({ "left": "-=15%" }, "slow" );
+    selectors.openCloseSliderButton.html("&gt");
+    selectors.openCloseSliderButton.unbind("click");
+    selectors.openCloseSliderButton.click(openSidebar);
 }
 
 function requestMerenja () {
@@ -29,8 +26,8 @@ function requestMerenja () {
     //          - error pop-up messgae
 
     var mapType = $('input[name=map-type]:checked', '#radio-map-type').val();
-    var selectedYear = $('#year').val();
-    var selectedMounth = $('#mounth').val();
+    var selectedYear = selectors.yearSelector.val();
+    var selectedMonth = selectors.monthSelector.val();
 
     debugger;
 
