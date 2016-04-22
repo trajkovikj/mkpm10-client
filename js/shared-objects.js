@@ -1,6 +1,6 @@
 var selectors = {
     sidebar :  $("#sidebar"),
-    pmValueDomElement : $("#pm-value"),
+    pmValueDisplayElement : $("#pm-value"),
     openCloseSliderButton : $("#open-close"),
     yearSelector : $("#year"),
     monthSelector : $("#month")

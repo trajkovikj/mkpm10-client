@@ -67,14 +67,14 @@ var merenjaPainter = (function () {
 
     function paintHtmlNode (htmlNode, merenje) {
         htmlNode.style.backgroundColor = colorResolver(merenje.pmValue);
-        selectors.pmValueDomElement.html(merenje.pmValue);
+        selectors.pmValueDisplayElement.html(merenje.pmValue);
     };
 
     function paintJsNode (jsNode, merenje) {
         jsNode.setOptions({
             fillColor : colorResolver(merenje.pmValue)
         });
-        selectors.pmValueDomElement.html(merenje.pmValue);
+        selectors.pmValueDisplayElement.html(merenje.pmValue);
     };
 
     function colorResolver(number) {
@@ -97,11 +97,11 @@ var merenjaPainter = (function () {
             }
         },
 
-        paintSrednaVrednostMapType : function (merenje) {
+        paintSrednaVrednostMapType : function (rectangle, merenje) {
             rectangle.setOptions({
                 fillColor : colorResolver(merenje.pmValue)
             });
-            selectors.pmValueDomElement.html(merenje.pmValue);
+            selectors.pmValueDisplayElement.html(merenje.pmValue);
         }
     };
 
@@ -111,10 +111,11 @@ var merenjaPainter = (function () {
 var broker = (function () {
 
     function constructSrednaVrednostMapType (year, month) {
-        var requestedMerenja = requests.getAllAvg(year, month);
-        merenjaIterator.resetIteratorData(requestedMerenja);
-        var currentObject = merenjaIterator.current();
-        merenjaPainter.paintNode(currentObject, null, rectangle)
+
+        requests.getAllAvg(year, month).done(function (data) {
+            merenjaIterator.resetIteratorData(data);
+            merenjaPainter.paintSrednaVrednostMapType(googleVariables.skRectangle, merenjaIterator.current());
+        });
     }
 
     function constructPoMernaStanicaMapType (year, month) {
