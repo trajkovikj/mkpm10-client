@@ -1,3 +1,5 @@
+"use strict";
+
 var map, heatmap, rectangle;
 var requestedMerenja, allMonthsByYears;
 var year;
@@ -45,10 +47,23 @@ function initMap() {
 
     console.log("Index: " + merenjaIterator.getIndex());
 
+    initMapTypes();
     initSelectors();
     
 }
 
+
+function initMapTypes() {
+
+    selectors.logo.after(function () {
+        return '<div id="radio-map-type">' +
+                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.SREDNA_VREDNOST.value +'" checked> '+ mapTypeEnum.SREDNA_VREDNOST.description +'<br>' +
+                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.PO_MERNA_STANICA.value +'"> '+ mapTypeEnum.PO_MERNA_STANICA.description +'<br>' +
+                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.HEATMAP.value +'"> '+ mapTypeEnum.HEATMAP.description +'<br>' +
+                + '</div>';
+    });
+
+}
 
 function initSelectors() {
     var i, j;

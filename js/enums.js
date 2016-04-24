@@ -1,6 +1,18 @@
+"use strict";
+
 var mapTypeEnum = {
-    SREDNA_VREDNOST : 0,
-    PO_MERNA_STANICA : 1,
-    HEATMAP : 2
+    SREDNA_VREDNOST : {
+        value : 0,
+        description : 'Средна вредност'
+    },
+    PO_MERNA_STANICA : {
+        value : 1,
+        description : 'Приказ по мерна станица'
+    },
+    HEATMAP : {
+        value : 2,
+        description : 'Приказ преку жаришта'
+    }
 };
+
 

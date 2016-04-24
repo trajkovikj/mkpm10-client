@@ -1,3 +1,5 @@
+"use strict";
+
 
 var merenjaIterator = (function () {
     var _index = 0;
@@ -65,18 +67,6 @@ var merenjaIterator = (function () {
 
 var merenjaPainter = (function () {
 
-    function paintHtmlNode (htmlNode, merenje) {
-        htmlNode.style.backgroundColor = colorResolver(merenje.pmValue);
-        selectors.pmValueDisplayElement.html(merenje.pmValue);
-    };
-
-    function paintJsNode (jsNode, merenje) {
-        jsNode.setOptions({
-            fillColor : colorResolver(merenje.pmValue)
-        });
-        selectors.pmValueDisplayElement.html(merenje.pmValue);
-    };
-
     function colorResolver(number) {
         if (number <= 50) {
             return '#00FF00';
@@ -89,19 +79,11 @@ var merenjaPainter = (function () {
 
     return {
 
-        paintNode : function (merenje, htmlNode, jsNode) {
-            if (htmlNode !== undefined && htmlNode !== null) {
-                paintHtmlNode(htmlNode, merenje);
-            } else if (jsNode !== undefined && jsNode !== null) {
-                paintJsNode(jsNode, merenje)
-            }
-        },
-
-        paintSrednaVrednostMapType : function (rectangle, merenje) {
+        paintSrednaVrednostMapType : function (rectangle, pmValue) {
             rectangle.setOptions({
-                fillColor : colorResolver(merenje.pmValue)
+                fillColor : colorResolver(pmValue)
             });
-            selectors.pmValueDisplayElement.html(merenje.pmValue);
+            selectors.pmValueDisplayElement.html(pmValue);
         }
     };
 
@@ -110,43 +92,49 @@ var merenjaPainter = (function () {
 
 var broker = (function () {
 
-    function constructSrednaVrednostMapType (year, month) {
+    function rectangleResolver(city) {
+        return googleVariables.rectangle; // smeni go so konkretniot kvadrat za gradot
+    }
 
-        requests.getAllAvg(year, month).done(function (data) {
+    function constructSrednaVrednostMapType (request) {
+
+        // da se klonira merenjaIterator za da moze da se vklucat povekje kvadrati
+        var rectangle = rectangleResolver(request.city); 
+        requests.getAllAvg(request.city, request.year, request.month).done(function (data) {
             merenjaIterator.resetIteratorData(data);
-            merenjaPainter.paintSrednaVrednostMapType(googleVariables.skRectangle, merenjaIterator.current());
+            merenjaPainter.paintSrednaVrednostMapType(rectangle, merenjaIterator.current().pmValue);
         });
     }
 
-    function constructPoMernaStanicaMapType (year, month) {
+    function constructPoMernaStanicaMapType (request) {
 
     }
 
-    function constructHeatmapMapType (year, month) {
+    function constructHeatmapMapType (request) {
 
     }
 
     return {
-        constructMap : function (mapType, year, month) {
-            var requestedMerenja;
+        constructMap : function (request) {
 
-            if(mapType == mapTypeEnum.SREDNA_VREDNOST) {
+            if(request.mapType == mapTypeEnum.SREDNA_VREDNOST.value) {
 
-                constructSrednaVrednostMapType(year, month);
+                constructSrednaVrednostMapType(request);
 
-            } else if (mapType == mapTypeEnum.PO_MERNA_STANICA) {
+            } else if (request.mapType == mapTypeEnum.PO_MERNA_STANICA.value) {
 
-                constructPoMernaStanicaMapType(year, month);
+                constructPoMernaStanicaMapType(request);
 
-            } else if (mapType == mapTypeEnum.HEATMAP) {
+            } else if (request.mapType == mapTypeEnum.HEATMAP.value) {
 
-                constructHeatmapMapType(year, month);
+                constructHeatmapMapType(request);
 
             } else {
-                console.log('broker.changeMapContext: Unknown mapType')
+                // console.log('broker.changeMapContext: Unknown mapType');
+                throw 'broker.changeMapContext: Unknown mapType';
             }
-
-
         }
+
+
     };
 })();

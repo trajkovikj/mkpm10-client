@@ -1,3 +1,15 @@
+"use strict";
+
+/*
+for (var key in p) {
+    if (p.hasOwnProperty(key)) {
+        alert(key + " -> " + p[key]);
+    }
+}
+
+-- hasOwnProperty se koristi za da se proveri property-to da ne doagja slucajno od prototype
+*/
+
 selectors.openCloseSliderButton.click(closeSidebar);
 
 function openSidebar () {
@@ -25,13 +37,15 @@ function requestMerenja () {
     //      err: 
     //          - error pop-up messgae
 
-    var mapType = $('input[name=map-type]:checked', '#radio-map-type').val();
-    var selectedYear = selectors.yearSelector.val();
-    var selectedMonth = selectors.monthSelector.val();
+    var request = {
+        mapType : $('input[name=map-type]:checked', '#radio-map-type').val(),
+        city : selectors.citySelector.val(),
+        year : selectors.yearSelector.val(),
+        month : selectors.monthSelector.val()
+    };
 
-    debugger;
+    broker.constructMap(request);
 
-    alert('Не работи серверот!');
 }
 
 function nextMerenjeButton () {
