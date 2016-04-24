@@ -92,15 +92,27 @@ var merenjaPainter = (function () {
 
 var broker = (function () {
 
-    function rectangleResolver(city) {
-        return googleVariables.rectangle; // smeni go so konkretniot kvadrat za gradot
+    function initMapForCity(cityId) {
+
+        var city = models.city.getById(cityId);
+        googleVariables.map.setCenter({lat: city.lat, lng: city.lng});
+        googleVariables.map.setZoom(city.zoomLevel);
+    }
+    
+    function rectangleResolver(cityId) {
+        var rectangle = googleVariables.cityRectangleCache.get(cityId);
+        if(rectangle) return rectangle;
+
+        var city = models.city.getById(cityId);
+        return googleVariables.cityRectangleCache.add(city);
     }
 
     function constructSrednaVrednostMapType (request) {
 
         // da se klonira merenjaIterator za da moze da se vklucat povekje kvadrati
-        var rectangle = rectangleResolver(request.city); 
-        requests.getAllAvg(request.city, request.year, request.month).done(function (data) {
+        initMapForCity(request.cityId);
+        var rectangle = rectangleResolver(request.cityId);
+        requests.getAllAvg(request.cityId, request.year, request.month).done(function (data) {
             merenjaIterator.resetIteratorData(data);
             merenjaPainter.paintSrednaVrednostMapType(rectangle, merenjaIterator.current().pmValue);
         });
@@ -117,15 +129,15 @@ var broker = (function () {
     return {
         constructMap : function (request) {
 
-            if(request.mapType == mapTypeEnum.SREDNA_VREDNOST.value) {
+            if(request.mapType == enums.mapType.SREDNA_VREDNOST.value) {
 
                 constructSrednaVrednostMapType(request);
 
-            } else if (request.mapType == mapTypeEnum.PO_MERNA_STANICA.value) {
+            } else if (request.mapType == enums.mapType.PO_MERNA_STANICA.value) {
 
                 constructPoMernaStanicaMapType(request);
 
-            } else if (request.mapType == mapTypeEnum.HEATMAP.value) {
+            } else if (request.mapType == enums.mapType.HEATMAP.value) {
 
                 constructHeatmapMapType(request);
 
@@ -133,7 +145,8 @@ var broker = (function () {
                 // console.log('broker.changeMapContext: Unknown mapType');
                 throw 'broker.changeMapContext: Unknown mapType';
             }
-        }
+        },
+        
 
 
     };

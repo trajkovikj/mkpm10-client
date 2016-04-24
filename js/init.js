@@ -1,15 +1,11 @@
 "use strict";
 
-var map, heatmap, rectangle;
-var requestedMerenja, allMonthsByYears;
-var year;
-var yearSelector = $( "#year" );
-var monthSelector = $( "#month" );
 
 function initMap() {
+
     googleVariables.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
-        center: {lat: 41.999218, lng: 21.429010},
+        center: {lat: models.city.getAll()[0].lat, lng: models.city.getAll()[0].lng},
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -19,94 +15,150 @@ function initMap() {
 
     // north-west : 42.040027, 21.335283
     // south-east : 41.958893, 21.512438
-    googleVariables.rectangle = new google.maps.Rectangle({
+    /*var rectangle = new google.maps.Rectangle({
       strokeColor: '#FFFFFF',
       strokeOpacity: 0.8,
       strokeWeight: 2,
-      //fillColor: '#FF0000',
+      fillColor: '#FF0000',
       fillOpacity: 0.35,
-      map: map,
+      map: googleVariables.map,
       bounds: {
         north: 42.040027,
         south: 41.958893,
         east: 21.512438,
         west: 21.335283
       }
-    });
+    });*/
 
-    googleVariables.heatmap = new google.maps.visualization.HeatmapLayer({
+    /*googleVariables.heatmap = new google.maps.visualization.HeatmapLayer({
       data: getSkPoints(),
       map: map,
       maxIntensity : 150,
       radius : 200
-    });
+    });*/
 
-    requestedMerenja = requests.getAllAvg();
-    merenjaIterator.resetIteratorData(requestedMerenja);
-    merenjaIterator.current(null, rectangle);
+    init();
+}
 
-    console.log("Index: " + merenjaIterator.getIndex());
+function init() {
+
+    /*requestedMerenja = requests.getAllAvg();
+     merenjaIterator.resetIteratorData(requestedMerenja);
+     merenjaIterator.current(null, rectangle);*/
 
     initMapTypes();
     initSelectors();
-    
+
+    /*var people = [
+        {
+            name : 'Ana',
+            age : 20,
+            height : 170,
+            weight : 65,
+            eyeColor : 'Brown'
+        },
+        {
+            name : 'Bob',
+            age : 24,
+            height : 184,
+            weight : 105,
+            eyeColor : 'Green'
+        },
+        {
+            name : 'John',
+            age : 29,
+            height : 190,
+            weight : 110,
+            eyeColor : 'Blue'
+        }
+    ];
+    console.log(utils.select(people, function (p) {
+        return {
+            name : p.name,
+            age : p.age
+        };
+    }));*/
+
 }
 
 
 function initMapTypes() {
 
     selectors.logo.after(function () {
-        return '<div id="radio-map-type">' +
-                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.SREDNA_VREDNOST.value +'" checked> '+ mapTypeEnum.SREDNA_VREDNOST.description +'<br>' +
-                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.PO_MERNA_STANICA.value +'"> '+ mapTypeEnum.PO_MERNA_STANICA.description +'<br>' +
-                + '<input type="radio" name="map-type" value="'+ mapTypeEnum.HEATMAP.value +'"> '+ mapTypeEnum.HEATMAP.description +'<br>' +
-                + '</div>';
+        var inputElements = '';
+
+        for(var key in enums.mapType){
+            if (enums.mapType.hasOwnProperty(key)) {
+                inputElements += '<input type="radio" name="map-type" value="'+ enums.mapType[key].value +'"> ' + enums.mapType[key].description +'<br>';
+            }
+        }
+
+        return '<div id="radio-map-type">' + inputElements + '</div>';
+
+    });
+
+    selectors.mapTypeRadio = $("#radio-map-type");
+    selectors.mapTypeRadio.find("input:radio").first().prop("checked", true);
+}
+
+function initSelectors() {
+    var allYears;
+
+    requests.getAllMonthsByYears().done(function (data) {
+        allYears = data;
+    });
+
+    initCitySelector(utils.select(models.city.getAll(), function (c) {
+        return { id : c.id, name : c.name };
+    }));
+
+
+    initYearsSelector(utils.select(allYears, function (x) {
+        return x.year;
+    }));
+
+    initMonthsSelector(formatMonthsArray(allYears[0].months));
+
+    selectors.yearSelector.change(function () {
+        var selectedYearId = selectors.yearSelector.find(" :selected").attr("id");
+        initMonthsSelector(formatMonthsArray(allYears[selectedYearId].months));
     });
 
 }
 
-function initSelectors() {
-    var i, j;
-    var initMonths, initYears = [];
+function initCitySelector (citiesArray) {
+    var i;
 
-    allMonthsByYears = requests.getAllMonthsByYears();
+    selectors.citySelector.html('');
 
-    for(j in allMonthsByYears) {
-        initYears.push(allMonthsByYears[j].year);
+    for(i = 0; i < citiesArray.length; i++) {
+        selectors.citySelector.append('<option id="'+ citiesArray[i].id +'" value="'+ citiesArray[i].id +'">'+ citiesArray[i].name +'</option>');
     }
-
-    initYearsSelector(initYears);
-
-    initMonths = allMonthsByYears[0].months;
-    initMonths.unshift('Сите месеци');
-    initMonthsSelector(initMonths);
-
-    yearSelector.change(function () {
-        var selectedYearId = $("#year option:selected").attr("id");
-        var months = allMonthsByYears[selectedYearId].months;
-        months.unshift('Сите месеци');
-        initMonthsSelector(months);
-    });
-
 }
 
 function initYearsSelector (yearsArray) {
     var i;
 
-    yearSelector.html('');
+    selectors.yearSelector.html('');
 
     for(i = 0; i < yearsArray.length; i++) {
-        yearSelector.append('<option id="'+ i +'" value="'+ yearsArray[i] +'">'+ yearsArray[i] +'</option>');
+        selectors.yearSelector.append('<option id="'+ i +'" value="'+ yearsArray[i] +'">'+ yearsArray[i] +'</option>');
     }
 }
 
 function initMonthsSelector (monthsArray) {
     var i;
 
-    monthSelector.html('');
+    selectors.monthSelector.html('');
 
     for(i = 0; i < monthsArray.length; i++) {
-        monthSelector.append('<option id="'+ i +'" value="'+ monthsArray[i] +'">'+ monthsArray[i] +'</option>');
+        selectors.monthSelector.append('<option id="'+ i +'" value="'+ i +'">'+ monthsArray[i] +'</option>');
     }
+}
+
+
+function formatMonthsArray(months) {
+    months.unshift('Сите месеци');
+    return months;
 }
 
