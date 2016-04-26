@@ -26,6 +26,11 @@ var requests = (function requests(){
 			return {
 				done : function (callback) {
 					callback(data);
+				},
+
+				fail : function (callback) {
+					var jqXHR, textStatus, errorThrown;
+					callback(jqXHR, textStatus, errorThrown);
 				}
 			}
 		},
@@ -58,6 +63,11 @@ var requests = (function requests(){
 			return {
 				done : function (callback) {
 					callback(data);
+				},
+
+				fail : function (callback) {
+					var jqXHR, textStatus, errorThrown;
+					callback(jqXHR, textStatus, errorThrown);
 				}
 			}
 		}
