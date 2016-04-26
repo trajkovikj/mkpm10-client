@@ -4,6 +4,8 @@ var models = {
 
     city : (function () {
 
+        var _repository = utils.object(cityRepository);
+
         var _list = [
             {
                 id : 0,
@@ -37,9 +39,11 @@ var models = {
         return {
 
             getAll : function () {
+                // _list = _repository.getAll();
                 return _list;
             },
             getById : function (id) {
+                // return _repository.get(id);
                 for(var i=0; i < _list.length; i++) {
                     if (_list[i].id === id) return _list[i];
                 }

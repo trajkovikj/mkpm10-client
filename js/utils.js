@@ -1,5 +1,11 @@
 var utils = {
 
+    object : function (o) {
+        function F() {}
+        F.prototype = o;
+        return new F();
+    },
+
     select : function (array, func) {
         var resultArray = [];
 
