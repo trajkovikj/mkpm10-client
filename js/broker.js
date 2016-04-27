@@ -1,6 +1,7 @@
 "use strict";
 
 var broker = (function () {
+    var _lastRequest;
 
     function initMapForCity(cityId) {
 
@@ -24,7 +25,7 @@ var broker = (function () {
         var rectangle = rectangleResolver(request.cityId);
         requests.getAllAvg(request.cityId, request.year, request.month).done(function (data) {
             merenjaIterator.resetIteratorData(data);
-            merenjaPainter.paintSrednaVrednostMapType(rectangle, merenjaIterator.current().pmValue);
+            merenjaPainter.paintSrednaVrednostMapType(rectangle, merenjaIterator.current());
         });
     }
 
@@ -55,7 +56,24 @@ var broker = (function () {
                 // console.log('broker.changeMapContext: Unknown mapType');
                 throw 'broker.changeMapContext: Unknown mapType';
             }
+
+            _lastRequest = request;
         },
+
+        playSlider : function()  {
+            // vrzi iterator
+            // vrzi painter
+        },
+
+        pauseSlider : function() {
+            // vrzi iterator
+            // vrzi painter
+        },
+
+        moveSlider : function(position) {
+            // vrzi iterator
+            // vrzi painter
+        }
 
 
 

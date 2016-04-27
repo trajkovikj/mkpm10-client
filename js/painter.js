@@ -14,11 +14,11 @@ var merenjaPainter = (function () {
 
     return {
 
-        paintSrednaVrednostMapType : function (rectangle, pmValue) {
+        paintSrednaVrednostMapType : function (rectangle, merenje) {
             rectangle.setOptions({
-                fillColor : colorResolver(pmValue)
+                fillColor : colorResolver(merenje.pmValue)
             });
-            selectors.pmValueDisplayElement.html(pmValue);
+            selectors.pmValueDisplayElement.html(merenje.pmValue);
         }
     };
 
