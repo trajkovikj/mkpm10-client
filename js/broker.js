@@ -1,9 +1,10 @@
 "use strict";
 
 var broker = (function () {
+
     var _lastRequest;
 
-    function initMapForCity(cityId) {
+    /*function initMapForCity(cityId) {
 
         var city = models.city.getById(cityId);
         googleVariables.map.setCenter({lat: city.lat, lng: city.lng});
@@ -35,22 +36,23 @@ var broker = (function () {
 
     function constructHeatmapMapType (request) {
 
-    }
+    } */
 
     return {
         constructMap : function (request) {
 
             if(request.mapType == enums.mapType.SREDNA_VREDNOST.value) {
 
-                constructSrednaVrednostMapType(request);
+                // constructSrednaVrednostMapType(request);
+                srednaVrednostBroker.constructMap(request);
 
             } else if (request.mapType == enums.mapType.PO_MERNA_STANICA.value) {
 
-                constructPoMernaStanicaMapType(request);
+                // constructPoMernaStanicaMapType(request);
 
             } else if (request.mapType == enums.mapType.HEATMAP.value) {
 
-                constructHeatmapMapType(request);
+                // constructHeatmapMapType(request);
 
             } else {
                 // console.log('broker.changeMapContext: Unknown mapType');
@@ -77,5 +79,36 @@ var broker = (function () {
 
 
 
+    };
+})();
+
+
+var srednaVrednostBroker = (function () {
+
+    function initMapForCity(cityId) {
+
+        var city = models.city.getById(cityId);
+        googleVariables.map.setCenter({lat: city.lat, lng: city.lng});
+        googleVariables.map.setZoom(city.zoomLevel);
+    }
+
+    function rectangleResolver(cityId) {
+        var rectangle = googleVariables.cityRectangleCache.get(cityId);
+        if(rectangle) return rectangle;
+
+        var city = models.city.getById(cityId);
+        return googleVariables.cityRectangleCache.add(city);
+    }
+
+    return {
+        constructMap : function (request) {
+            // da se klonira merenjaIterator za da moze da se vklucat povekje kvadrati
+            initMapForCity(request.cityId);
+            var rectangle = rectangleResolver(request.cityId);
+            requests.getAllAvg(request.cityId, request.year, request.month).done(function (data) {
+                merenjaIterator.resetIteratorData(data);
+                merenjaPainter.paintSrednaVrednostMapType(rectangle, merenjaIterator.current());
+            });
+        }
     };
 })();
