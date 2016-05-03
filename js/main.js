@@ -1,21 +1,5 @@
 "use strict";
 
-selectors.openCloseSliderButton.on("click", closeSidebar);
-
-function openSidebar () {
-    selectors.sidebar.animate({ "left": "+=15%" }, "slow" );
-    selectors.openCloseSliderButton.html("&lt");
-    selectors.openCloseSliderButton.off("click");
-    selectors.openCloseSliderButton.on("click", closeSidebar);
-}
-
-function closeSidebar () {
-    selectors.sidebar.animate({ "left": "-=15%" }, "slow" );
-    selectors.openCloseSliderButton.html("&gt");
-    selectors.openCloseSliderButton.off("click");
-    selectors.openCloseSliderButton.on("click", openSidebar);
-}
-
 function requestMerenja () {
     // zemi godina
     // zemi mesec

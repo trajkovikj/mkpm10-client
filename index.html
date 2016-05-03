@@ -3,9 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Heatmaps</title>
+
+    <!-- external libs css -->
+    <link rel="stylesheet" type="text/css" href="./libs/jquery-ui/jquery-ui.structure.min.css" />
+    <link rel="stylesheet" type="text/css" href="./libs/jquery-ui/jquery-ui.theme.min.css" />
+
+    <!-- css -->
     <link rel="stylesheet" type="text/css" href="./css/main.css" />
 
-    <script id="sidebar-template" type="text/x-handlebars-template">
+    <!--<script id="sidebar-template" type="text/x-handlebars-template">
       <div id="sidebar">
 
         <button id="open-close">&lt</button>
@@ -54,20 +60,14 @@
 
 
       </div>
-    </script>
+    </script>-->
 
 
-    <script id="sidebar-month-template" type="text/x-handlebars-template">
+    <!--<script id="sidebar-month-template" type="text/x-handlebars-template">
       {{#each months}}
         <option id="{{id}}" value="{{value}}">{{content}}</option>
       {{/each}}
-
-      <!--<select id="month" class="select" name="month">
-        {{#each months}}
-        <option id="{{id}}" value="{{value}}">{{content}}</option>
-        {{/each}}
-      </select>-->
-    </script>
+    </script>-->
 
 
 
@@ -75,9 +75,11 @@
 
   <body>
 
-
-
     <div id="slider"></div>
+
+    <div id="display"></div>
+
+    <div id="map"></div>
 
     <!--<div id="floating-panel">
       <button onclick="toggleRectangle()">Toggle Recktangle</button>
@@ -88,7 +90,11 @@
       <button onclick="changeOpacity()">Change opacity</button>
     </div>-->
 
-    <div id="map"></div>
+
+
+
+
+
 
     
 
@@ -100,13 +106,15 @@
 
 
     <!-- libs -->
-    <script src="./js/libs/handlebars-v4.0.5.js"></script>
+    <script src="./libs/handlebars-v4.0.5.js"></script>
+    <script src="./libs/jquery-ui/jquery-ui.min.js"></script>
 
 
     <!-- core -->
     <script type="text/javascript" src="./js/enums.js"></script>
     <script type="text/javascript" src="./js/core/core.js"></script>
     <script type="text/javascript" src="./js/core/mediator.js"></script>
+    <script type="text/javascript" src="./js/core/template-handler.js"></script>
     <script type="text/javascript" src="js/core/utils.js"></script>
     <script type="text/javascript" src="js/core/sandbox.js"></script>
     <script type="text/javascript" src="./js/shared-objects.js"></script>

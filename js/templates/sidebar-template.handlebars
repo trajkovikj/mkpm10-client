@@ -1,0 +1,48 @@
+<div id="sidebar">
+
+    <button id="open-close">&lt</button>
+
+    <div id="logo">
+        <span id="title">ФИНКИ</span>
+        <br>
+        <span id="subtitle">еко-информатика</span>
+    </div>
+
+    <div id="radio-map-type">
+        {{#each mapTypes}}
+            <input type="radio" name="map-type" value="{{value}}" {{checked}}> {{description}}<br>
+        {{/each}}
+    </div>
+
+    <select id="city" class="select" name="city">
+        {{#each cities}}
+            <option id="{{id}}" value="{{value}}">{{content}}</option>
+        {{/each}}
+    </select>
+
+    <select id="year" class="select" name="year">
+        {{#each years}}
+            <option id="{{id}}" value="{{value}}">{{content}}</option>
+        {{/each}}
+    </select>
+
+    <select id="month" class="select" name="month">
+        {{#each months}}
+            <option id="{{id}}" value="{{value}}">{{content}}</option>
+        {{/each}}
+    </select>
+
+    <button id="submit">Превземи</button>
+
+    <div id="pm-display">
+        <label id="pm-label">PM10 :</label>
+        <span id="pm-value"></span>
+    </div>
+
+    <div id="date-scroller">
+        <button onclick="prevMerenjeButton()">Prev</button>
+        <button onclick="nextMerenjeButton()">Next</button>
+    </div>
+
+
+</div>

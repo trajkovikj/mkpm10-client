@@ -2,7 +2,11 @@
 
 finkipm.core.registerModule('sliderModule', function (sandbox) {
 
+    // embed iterator
+
     // cache dom elements
+    var sliderSelector = $("#slider");
+    var displaySelector = $("#display"); // treba da bide poseben modul
     
     function getCurrentPosition() {
         return 0; // slider peek position
@@ -10,6 +14,24 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
     function render() {
 
+        sliderSelector.slider({
+            range: "min",
+            value: 1,
+            min: 1,
+            max: 1,
+            slide: function( event, ui ) {
+                displaySelector.html("slide :: " + ui.value);
+            },
+            change: function( event, ui ) {
+                displaySelector.html("change :: " + ui.value);
+            },
+            start: function( event, ui ) {
+                displaySelector.html("start :: " + ui.value);
+            },
+            stop: function( event, ui ) {
+                displaySelector.html("stop :: " + ui.value);
+            }
+        });
     }
 
     return {
@@ -36,8 +58,8 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         },
         
         start : function () {
+            render();
             // init event listeners
-            // render
         },
         
         destroy : function () {

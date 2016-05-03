@@ -4,17 +4,26 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
     var _utils = finkipm.utils;
     var _linq = finkipm.utils.linq;
+    var _templateHandler = finkipm.core.extensions.templateHandler;
     var _cityModel = _utils.object(finkipm.core.getModel('cityModel'));
     var _dateRepository = _utils.object(finkipm.core.getRepository('dateRepository'));
 
     // cache dom elements
     var body = $("body");
-    var templateSelector = $("#sidebar-template");
-    var templateSource = templateSelector.html();
-    var template = Handlebars.compile(templateSource);
-    var templateMonthSelector = $("#sidebar-month-template");
-    var templateMonthSelectorSource = templateMonthSelector.html();
-    var monthTemplate = Handlebars.compile(templateMonthSelectorSource);
+    var templateSource;
+    var template;
+    var templateMonthSelectorSource;
+    var monthTemplate;
+
+    _templateHandler.getTemplate('sidebar-template', function(data){
+        templateSource = data;
+        template = Handlebars.compile(templateSource);
+    });
+
+    _templateHandler.getTemplate('sidebar-month-template', function(data){
+        templateMonthSelectorSource = data;
+        monthTemplate = Handlebars.compile(templateSource);
+    });
 
     var sidebarSelector;
     var openCloseSliderButton;
@@ -25,89 +34,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var submitButton;
 
     var allYearsWithMonths;
-
-    /*
-
-    function init() {
-        initMapTypes();
-        initSelectors();
-    }
-
-    function initMapTypes() {
-
-        selectors.logo.after(function () {
-            var inputElements = '';
-
-            for(var key in enums.mapType){
-                if (enums.mapType.hasOwnProperty(key)) {
-                    inputElements += '<input type="radio" name="map-type" value="'+ enums.mapType[key].value +'"> ' + enums.mapType[key].description +'<br>';
-                }
-            }
-
-            return '<div id="radio-map-type">' + inputElements + '</div>';
-
-        });
-
-        selectors.mapTypeRadio = $("#radio-map-type");
-        selectors.mapTypeRadio.find("input:radio").first().prop("checked", true);
-    }
-
-    function initSelectors() {
-        var allYears;
-
-        requests.getAllMonthsByYears().done(function (data) {
-            allYears = data;
-        });
-
-        initCitySelector(utils.select(models.city.getAll(), function (c) {
-            return { id : c.id, name : c.name };
-        }));
-
-
-        initYearsSelector(utils.select(allYears, function (x) {
-            return x.year;
-        }));
-
-        initMonthsSelector(formatMonthsArray(allYears[0].months));
-
-        selectors.yearSelector.change(function () {
-            var selectedYearId = selectors.yearSelector.find(" :selected").attr("id");
-            initMonthsSelector(formatMonthsArray(allYears[selectedYearId].months));
-        });
-
-    }
-
-    function initCitySelector (citiesArray) {
-        var i;
-
-        selectors.citySelector.html('');
-
-        for(i = 0; i < citiesArray.length; i++) {
-            selectors.citySelector.append('<option id="'+ citiesArray[i].id +'" value="'+ citiesArray[i].id +'">'+ citiesArray[i].name +'</option>');
-        }
-    }
-
-    function initYearsSelector (yearsArray) {
-        var i;
-
-        selectors.yearSelector.html('');
-
-        for(i = 0; i < yearsArray.length; i++) {
-            selectors.yearSelector.append('<option id="'+ i +'" value="'+ yearsArray[i] +'">'+ yearsArray[i] +'</option>');
-        }
-    }
-
-    function initMonthsSelector (monthsArray) {
-        var i;
-
-        selectors.monthSelector.html('');
-
-        for(i = 0; i < monthsArray.length; i++) {
-            selectors.monthSelector.append('<option id="'+ i +'" value="'+ i +'">'+ monthsArray[i] +'</option>');
-        }
-    }
-
-    */
 
 
     function formatMonthsArray(months) {
@@ -176,6 +102,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         return result;
     }
 
+
     function render() {
 
         _dateRepository.getAllYearsWithMonths().done(function(data) {
@@ -213,6 +140,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         monthSelector.html('');
         monthSelector.html(html);
     }
+
 
     function openSidebarEvent() {
         sidebarSelector.animate({ "left": "+=15%" }, "slow" );
