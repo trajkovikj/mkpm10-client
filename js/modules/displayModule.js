@@ -49,7 +49,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
 
     function formatSliderData(sliderData) {
         return {
-            date : sliderData.date,
+            date : sliderData.date.format("dd.mm.yyyy"),
             pmValue : sliderData.pmValue
         };
     }
