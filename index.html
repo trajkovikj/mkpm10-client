@@ -4,80 +4,134 @@
     <meta charset="utf-8">
     <title>Heatmaps</title>
     <link rel="stylesheet" type="text/css" href="./css/main.css" />
+
+    <script id="sidebar-template" type="text/x-handlebars-template">
+      <div id="sidebar">
+
+        <button id="open-close">&lt</button>
+
+        <div id="logo">
+          <span id="title">ФИНКИ</span>
+          <br>
+          <span id="subtitle">еко-информатика</span>
+        </div>
+
+        <div id="radio-map-type">
+          {{#each mapTypes}}
+          <input type="radio" name="map-type" value="{{value}}" {{checked}}> {{description}}<br>
+          {{/each}}
+        </div>
+
+        <select id="city" class="select" name="city">
+          {{#each cities}}
+          <option id="{{id}}" value="{{value}}">{{content}}</option>
+          {{/each}}
+        </select>
+
+        <select id="year" class="select" name="year">
+          {{#each years}}
+          <option id="{{id}}" value="{{value}}">{{content}}</option>
+          {{/each}}
+        </select>
+
+        <select id="month" class="select" name="month">
+          {{#each months}}
+          <option id="{{id}}" value="{{value}}">{{content}}</option>
+          {{/each}}
+        </select>
+
+        <button id="submit">Превземи</button>
+
+        <div id="pm-display">
+          <label id="pm-label">PM10 :</label>
+          <span id="pm-value"></span>
+        </div>
+
+        <div id="date-scroller">
+          <button onclick="prevMerenjeButton()">Prev</button>
+          <button onclick="nextMerenjeButton()">Next</button>
+        </div>
+
+
+      </div>
+    </script>
+
+
+    <script id="sidebar-month-template" type="text/x-handlebars-template">
+      {{#each months}}
+        <option id="{{id}}" value="{{value}}">{{content}}</option>
+      {{/each}}
+
+      <!--<select id="month" class="select" name="month">
+        {{#each months}}
+        <option id="{{id}}" value="{{value}}">{{content}}</option>
+        {{/each}}
+      </select>-->
+    </script>
+
+
+
   </head>
 
   <body>
 
-    <div id="sidebar">
 
-      <button id="open-close">&lt</button>
-
-      <div id="logo">
-        <span id="title">ФИНКИ</span>
-        <br>
-        <span id="subtitle">еко-информатика</span>
-      </div>
-      
-      <!--<div id="radio-map-type">
-        <input type="radio" name="map-type" value="0" checked> Средна вредност<br>
-        <input type="radio" name="map-type" value="1"> Приказ по мерна станица<br>
-        <input type="radio" name="map-type" value="2"> Приказ преку жаришта<br>
-      </div>-->
-
-      <select id="city" class="select" name="city"></select>
-      <select id="year" class="select" name="year"></select>
-      <select id="month" class="select" name="month"></select>
-      <button id="submit" onclick="requestMerenja()">Превземи</button>
-
-      <div id="pm-display">
-        <label id="pm-label">PM10 :</label>
-        <span id="pm-value"></span>
-      </div>
-
-      <div id="date-scroller">
-        <button onclick="prevMerenjeButton()">Prev</button>
-        <button onclick="nextMerenjeButton()">Next</button>
-      </div>
-     
-
-    </div>
 
     <div id="slider"></div>
 
-    <div id="floating-panel">
+    <!--<div id="floating-panel">
       <button onclick="toggleRectangle()">Toggle Recktangle</button>
       <button onclick="toggleMarkers()">Toggle Markers</button>
       <button onclick="toggleHeatmap()">Toggle Heatmap</button>
       <button onclick="changeGradient()">Change gradient</button>
       <button onclick="changeRadius()">Change radius</button>
       <button onclick="changeOpacity()">Change opacity</button>
-    </div>
+    </div>-->
 
     <div id="map"></div>
 
     
-    <!-- <script type="text/javascript" src="./marker-test.js"></script> -->
-    
+
+    <!-- cdn -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC484gyJTuQAL1Pvgfd22MGViXMa_zmW00&libraries=visualization&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC484gyJTuQAL1Pvgfd22MGViXMa_zmW00&libraries=visualization&callback=initMap">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 
 
-    <!-- utils, enums and shared objects -->
-    <script type="text/javascript" src="js/core/utils.js"></script>
+    <!-- libs -->
+    <script src="./js/libs/handlebars-v4.0.5.js"></script>
+
+
+    <!-- core -->
     <script type="text/javascript" src="./js/enums.js"></script>
+    <script type="text/javascript" src="./js/core/core.js"></script>
+    <script type="text/javascript" src="./js/core/mediator.js"></script>
+    <script type="text/javascript" src="js/core/utils.js"></script>
+    <script type="text/javascript" src="js/core/sandbox.js"></script>
     <script type="text/javascript" src="./js/shared-objects.js"></script>
 
-    <!-- repositories and models -->
+
+    <!-- repositories  -->
     <script type="text/javascript" src="./js/repositories/city-repository.js"></script>
-    <script type="text/javascript" src="js/models/city-model.js"></script>
+    <script type="text/javascript" src="./js/repositories/date-repository.js"></script>
     <script type="text/javascript" src="./js/requests.js"></script>
+
+
+    <!--  models -->
+    <script type="text/javascript" src="js/models/city-model.js"></script>
+
+
+    <!-- modules -->
+    <script type="text/javascript" src="./js/modules/sidebarModule.js"></script>
+    <script type="text/javascript" src="./js/modules/sliderModule.js"></script>
+
 
     <!-- handlers -->
     <script type="text/javascript" src="js/iterator.js"></script>
     <script type="text/javascript" src="js/painter.js"></script>
     <script type="text/javascript" src="js/broker.js"></script>
+
 
     <!-- setup and initialisation -->
     <script type="text/javascript" src="./js/init.js"></script>
@@ -88,3 +142,4 @@
 
   </body>
 </html>
+

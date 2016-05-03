@@ -1,5 +1,6 @@
 "use strict";
 
+// libs/*.js
 // enums.js
 // core.js
 // mediator.js
@@ -23,15 +24,22 @@
 
 function initMap() {
 
+    var initCity = finkipm.core.getModel('cityModel').getAll()[0];
+
     googleVariables.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
-        center: {lat: models.city.getAll()[0].lat, lng: models.city.getAll()[0].lng},
+        center: {lat: initCity.lat, lng: initCity.lng},
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         mapTypeControl: true,
         mapTypeControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP
         }
     });
+
+    finkipm.core.startAllModules();
+
+
+
 
     // north-west : 42.040027, 21.335283
     // south-east : 41.958893, 21.512438
@@ -57,7 +65,7 @@ function initMap() {
       radius : 200
     });*/
 
-    init();
+    // init();
 }
 
 function init() {
@@ -66,8 +74,8 @@ function init() {
      merenjaIterator.resetIteratorData(requestedMerenja);
      merenjaIterator.current(null, rectangle);*/
 
-    initMapTypes();
-    initSelectors();
+    /*initMapTypes();
+    initSelectors();*/
 
     /*var people = [
         {
@@ -175,7 +183,6 @@ function initMonthsSelector (monthsArray) {
         selectors.monthSelector.append('<option id="'+ i +'" value="'+ i +'">'+ monthsArray[i] +'</option>');
     }
 }
-
 
 function formatMonthsArray(months) {
     months.unshift('Сите месеци');

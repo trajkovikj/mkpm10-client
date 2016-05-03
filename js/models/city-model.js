@@ -1,6 +1,6 @@
 "use strict";
 
-finkipm.core.registerModel('city', (function () {
+finkipm.core.registerModel('cityModel', (function () {
 
     var _repository = finkipm.utils.object(finkipm.core.getRepository('cityRepository'));
 
