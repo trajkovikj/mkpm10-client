@@ -27,10 +27,26 @@ html, body {
   position: absolute;
   bottom: 3%;
   right: 10%;
-  height: 2%;
+  height: 3%;
   width: 60%;
   z-index: 5;
-  background-color: #fff;
+  /*background-color: #fff;*/
+  padding: 1%;
+    clear: both;
+  /*overflow: hidden;*/
+}
+
+#slider #sliderButton {
+  float : left;
+  height: 95%;
+  width: 10%;
+}
+
+#slider #sliderScroller {
+  float : left;
+  margin-left: 5%;
+  height: 50%;
+  width: 83%;
 }
 
 #floating-panel {

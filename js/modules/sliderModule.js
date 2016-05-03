@@ -2,69 +2,168 @@
 
 finkipm.core.registerModule('sliderModule', function (sandbox) {
 
-    // embed iterator
+    var _templateHandler = finkipm.core.extensions.templateHandler;
+    var _localIterator = finkipm.utils.object(finkipm.core.extensions.iterator);
+    var _lastNotification;
+    var intervalId;
 
     // cache dom elements
-    var sliderSelector = $("#slider");
-    var displaySelector = $("#display"); // treba da bide poseben modul
+    var body = $("body");
+    var sliderSelector;
+    var sliderButtonSelector;
+    var sliderScrollerSelector;
     
-    function getCurrentPosition() {
-        return 0; // slider peek position
+    var templateSource;
+    var template;
+
+    _templateHandler.getTemplate('slider-template', function(data){
+        templateSource = data;
+        template = Handlebars.compile(templateSource);
+    });
+
+    function initSlider() {
+
+        var html = template({btnContent : 'Play'});
+        body.append(html);
+        sliderSelector = $("#slider");
+        sliderButtonSelector = sliderSelector.find("#sliderButton");
+        sliderScrollerSelector = sliderSelector.find("#sliderScroller");
+
+        sliderButtonSelector.on('click', sliderButtonPlayEvent);
+
+        sliderScrollerSelector.slider({
+            range: "min",
+            value: 0,
+            min: 0,
+            max: 0,
+
+            slide: function( event, ui ) {
+
+                _localIterator.setIndex(ui.value);
+                var merenje = _localIterator.current();
+
+                if(!merenje) return;
+
+                sandbox.notify({
+                    eventId : 'slider-change-position',
+                    data : merenje
+                });
+            }
+
+        });
+    }
+
+    function destroySlider() {
+        sliderSelector.remove();
+        sliderButtonSelector.off('click');
     }
 
     function render() {
 
-        sliderSelector.slider({
-            range: "min",
-            value: 1,
-            min: 1,
-            max: 1,
-            slide: function( event, ui ) {
-                displaySelector.html("slide :: " + ui.value);
-            },
-            change: function( event, ui ) {
-                displaySelector.html("change :: " + ui.value);
-            },
-            start: function( event, ui ) {
-                displaySelector.html("start :: " + ui.value);
-            },
-            stop: function( event, ui ) {
-                displaySelector.html("stop :: " + ui.value);
-            }
+    }
+
+    function sliderButtonPlayEvent() {
+        sliderButtonSelector.off('click');
+        sliderButtonSelector.on('click', sliderButtonPauseEvent);
+        sliderButtonSelector.html('Pause');
+
+        intervalId = setInterval(sliderNext, 1000);
+    }
+
+    function sliderButtonPauseEvent() {
+        sliderButtonSelector.off('click');
+        sliderButtonSelector.on('click', sliderButtonPlayEvent);
+        sliderButtonSelector.html('Play');
+
+        clearInterval(intervalId);
+    }
+    
+    function sidebarSubmitRequestEvent(notification) {
+
+        // se cuva poslednata notiikacija, bidejki ke bide potrebno pri change event na slider-ot
+        // da se znae na koj kanal da se emituva podatokot
+        // ova e se poradi razlicniot format na merenja pri razlicen mapType
+        _lastNotification = notification;
+        _localIterator.resetIteratorData(notification.response)
+
+        sliderScrollerSelector.slider("option", "max", notification.response.length - 1);
+        sliderScrollerSelector.slider("option", "min", 0);
+        sliderScrollerSelector.slider("option", "value", 0);
+
+        var merenje = _localIterator.current();
+
+        if(!merenje) return;
+
+        sandbox.notify({
+            eventId : 'slider-change-position',
+            data : merenje
+        });
+    }
+
+    function sliderNext() {
+        var merenje = _localIterator.next();
+        if(!merenje) return;
+
+        sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
+
+        sandbox.notify({
+            eventId : 'slider-change-position',
+            data : merenje
+        });
+    }
+
+    function sliderPrevious() {
+        var merenje = _localIterator.prev();
+        if(!merenje) return;
+
+        sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
+
+        sandbox.notify({
+            eventId : 'slider-change-position',
+            data : merenje
         });
     }
 
     return {
+
+        initListeners : function () {
+            sandbox.addListener('sidebar-submit-request', sidebarSubmitRequestEvent, this);
+        },
+
+        removeListeners : function () {
+            sandbox.removeListener('sidebar-submit-request', sidebarSubmitRequestEvent);
+        },
         
         play : function () {
             sandbox.notify({
                 eventId : 'slider-play',
-                data : getCurrentPosition()
+                data : {}
             });
         },
         
         pause : function () {
             sandbox.notify({
                 eventId : 'slider-pause',
-                data : getCurrentPosition()
+                data : {}
             });
         },
         
         changePosition : function () {
             sandbox.notify({
                 eventId : 'slider-change-position',
-                data : getCurrentPosition()
+                data : {}
             });
         },
         
         start : function () {
-            render();
+            initSlider();
+            this.initListeners();
             // init event listeners
         },
         
         destroy : function () {
-            // disable event listeners
-            // remove from dom
+            destroySlider();
+            this.removeListeners();
         }
     };
 });

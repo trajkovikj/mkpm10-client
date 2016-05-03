@@ -172,10 +172,24 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
                 month : monthSelector.val()
             };
 
-            sandbox.notify({
-                eventId : 'sidebar-submit-request',
-                data : request
+            // ova e test
+            // request.getAllAvg treba da se zameni so nekoe repository ili model
+            // koj sto ke go primi requestot i preku ajax ke vrati rezultati od serverot
+            // na callback ke ja konstruira notifikacijata i ke ja publish-ne na medijatorot
+            requests.getAllAvg(request.year, request.month).done(function (data) {
+
+                var notification = {
+                    request : request,
+                    response : data
+                };
+
+                sandbox.notify({
+                    eventId : 'sidebar-submit-request',
+                    data : notification
+                });
             });
+
+
         },
 
         start : function () {

@@ -26,7 +26,7 @@ finkipm.core.extensions.mediator = (function () {
 
             for(var i=0; i < listeners.length; i++){
                 if(listeners[i].handler === handler) {
-                    listeners[i].splice(i, 1);
+                    listeners.splice(i, 1);
                     break;
                 }
             }
