@@ -1,15 +1,5 @@
 "use strict";
 
-/*
- for (var key in p) {
-    if (p.hasOwnProperty(key)) {
-        alert(key + " -> " + p[key]);
-    }
-}
-
--- hasOwnProperty se koristi za da se proveri property-to da ne doagja slucajno od prototype
-*/
-
 selectors.openCloseSliderButton.on("click", closeSidebar);
 
 function openSidebar () {
@@ -48,12 +38,5 @@ function requestMerenja () {
 
 }
 
-function nextMerenjeButton () {
-    merenjaIterator.next(null, rectangle);
-}
-
-function prevMerenjeButton () {
-    merenjaIterator.prev(null, rectangle);
-}
 
 

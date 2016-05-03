@@ -1,5 +1,25 @@
 "use strict";
 
+// enums.js
+// core.js
+// mediator.js
+// utils.js
+// sandbox.js
+// repositories/*.js
+// models/*.js
+// modules/*.js
+
+// main.js
+// init.js
+
+// ???
+// iterator.js
+// broker.js
+// painter.js
+// shared-objects.js
+// map-setup.js
+// requests.js
+// marker-test.js
 
 function initMap() {
 

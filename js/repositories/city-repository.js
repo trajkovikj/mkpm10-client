@@ -1,4 +1,6 @@
-var cityRepository = (function () {
+"use strict";
+
+finkipm.core.registerRepository('cityRepository',(function () {
 
     function mapSend(city) {
         return {
@@ -37,4 +39,6 @@ var cityRepository = (function () {
 
         }
     };
-})();
+})());
+
+
