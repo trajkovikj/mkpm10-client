@@ -11,6 +11,8 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     var body = $("body");
     var sliderSelector;
     var sliderButtonSelector;
+    var sliderSeekLeftButtonSelector;
+    var sliderSeekRightButtonSelector;
     var sliderScrollerSelector;
     
     var templateSource;
@@ -23,10 +25,12 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
     function initSlider() {
 
-        var html = template({btnContent : ''});
+        var html = template({playPause : '', seekLeft : '', seekRight : ''});
         body.append(html);
         sliderSelector = $("#slider");
         sliderButtonSelector = sliderSelector.find("#sliderButton");
+        sliderSeekLeftButtonSelector = sliderSelector.find("#seekLeft");
+        sliderSeekRightButtonSelector = sliderSelector.find("#seekRight");
         sliderScrollerSelector = sliderSelector.find("#sliderScroller");
 
         // sliderButtonSelector.addClass("ui-icon").addClass("ui-icon-play");
@@ -37,6 +41,22 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
             text : false
         });
         sliderButtonSelector.on('click', sliderButtonPlayEvent);
+
+        sliderSeekLeftButtonSelector.button({
+            icons : {
+                primary : 'ui-icon-seek-prev'
+            },
+            text : false
+        });
+        sliderSeekLeftButtonSelector.on('click', sliderPrevious);
+
+        sliderSeekRightButtonSelector.button({
+            icons : {
+                primary : 'ui-icon-seek-next'
+            },
+            text : false
+        });
+        sliderSeekRightButtonSelector.on('click', sliderNext);
 
         sliderScrollerSelector.slider({
             range: "min",
@@ -63,6 +83,8 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     function destroySlider() {
         sliderSelector.remove();
         sliderButtonSelector.off('click');
+        sliderSeekLeftButtonSelector.off('click');
+        sliderSeekRightButtonSelector.off('click');
     }
 
     function render() {
