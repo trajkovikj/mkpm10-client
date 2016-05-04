@@ -13,7 +13,7 @@ html, body {
   height: auto;
   width: auto;
   top: 1%;
-  right: 10%;
+  right: 3%;
   z-index: 5;
   background-color: #fff;
   padding: 0.5%;
@@ -38,13 +38,14 @@ html, body {
 
 #slider #sliderButton {
   float : left;
-  height: 95%;
-  width: 10%;
+  height: 80%;
+  width: 5%;
 }
 
 #slider #sliderScroller {
   float : left;
-  margin-left: 5%;
+  margin-left: 2%;
+  margin-top: 0.3%;
   height: 50%;
   width: 83%;
 }
@@ -73,21 +74,17 @@ html, body {
   z-index: 5;
   background-color: #9E9E9E;
   opacity: 0.8;
-  /*padding: 5px;*/
   box-shadow: 5px 0px 20px #424242;
-  /*border: 1px solid #424242;*/
   text-align: center;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
-  /*padding-top: 5%;*/
-  /*padding-left: 10px;*/
 }
 
 #sidebar #open-close {
   position: absolute;
   top: 1%;
   right: 1%;
-  font-size: 1.1em;
+  font-size: 1.3em;
 }
 
 #sidebar #logo {
@@ -113,7 +110,7 @@ html, body {
   margin-left: 5%;
   margin-bottom: 5%;
   text-align: left;
-  font-size: 1em;
+  font-size: 1.2em;
   font-weight: 400;
   color: #333;
 }

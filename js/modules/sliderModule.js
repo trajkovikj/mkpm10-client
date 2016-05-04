@@ -23,12 +23,19 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
     function initSlider() {
 
-        var html = template({btnContent : 'Play'});
+        var html = template({btnContent : ''});
         body.append(html);
         sliderSelector = $("#slider");
         sliderButtonSelector = sliderSelector.find("#sliderButton");
         sliderScrollerSelector = sliderSelector.find("#sliderScroller");
 
+        // sliderButtonSelector.addClass("ui-icon").addClass("ui-icon-play");
+        sliderButtonSelector.button({
+            icons : {
+                primary : 'ui-icon-play'
+            },
+            text : false
+        });
         sliderButtonSelector.on('click', sliderButtonPlayEvent);
 
         sliderScrollerSelector.slider({
@@ -65,7 +72,15 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     function sliderButtonPlayEvent() {
         sliderButtonSelector.off('click');
         sliderButtonSelector.on('click', sliderButtonPauseEvent);
-        sliderButtonSelector.html('Pause');
+        // sliderButtonSelector.html('Pause');
+
+        // sliderButtonSelector.removeClass("ui-icon-play").addClass("ui-icon-pause");
+        sliderButtonSelector.button({
+            icons : {
+                primary : 'ui-icon-pause'
+            },
+            text : false
+        });
 
         intervalId = setInterval(sliderNext, 1000);
     }
@@ -73,7 +88,15 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     function sliderButtonPauseEvent() {
         sliderButtonSelector.off('click');
         sliderButtonSelector.on('click', sliderButtonPlayEvent);
-        sliderButtonSelector.html('Play');
+        // sliderButtonSelector.html('Play');
+
+        // sliderButtonSelector.removeClass("ui-icon-pause").addClass("ui-icon-play");
+        sliderButtonSelector.button({
+            icons : {
+                primary : 'ui-icon-play'
+            },
+            text : false
+        });
 
         clearInterval(intervalId);
     }

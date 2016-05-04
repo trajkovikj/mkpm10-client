@@ -128,6 +128,13 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             yearSelector = sidebarSelector.find("#year");
             monthSelector = sidebarSelector.find("#month");
             submitButton = sidebarSelector.find("#submit");
+
+            openCloseSliderButton.button({
+                icons : {
+                    primary : 'ui-icon-triangle-1-w'
+                },
+                text : false
+            });
         });
     }
 
@@ -144,14 +151,30 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
     function openSidebarEvent() {
         sidebarSelector.animate({ "left": "+=15%" }, "slow" );
-        openCloseSliderButton.html("&lt");
+
+        // openCloseSliderButton.html("&lt");
+        openCloseSliderButton.button({
+            icons : {
+                primary : 'ui-icon-triangle-1-w'
+            },
+            text : false
+        });
+
         openCloseSliderButton.off("click");
         openCloseSliderButton.on("click", closeSidebarEvent);
     }
 
     function closeSidebarEvent() {
         sidebarSelector.animate({ "left": "-=15%" }, "slow" );
-        openCloseSliderButton.html("&gt");
+
+        // openCloseSliderButton.html("&gt");
+        openCloseSliderButton.button({
+            icons : {
+                primary : 'ui-icon-triangle-1-e'
+            },
+            text : false
+        });
+
         openCloseSliderButton.off("click");
         openCloseSliderButton.on("click", openSidebarEvent);
     }
