@@ -19,7 +19,9 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
     function init(cityId) {
 
-        if(cityId) {
+        initCity = cityId;
+
+        if(cityId !== null && cityId !== undefined) {
             // kreiraj rectangle za konkretniot grad
             var city = _cityModel.getById(cityId);
             googleVariables.cityRectangleCache.add(city);
@@ -35,6 +37,10 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
     function destroy() {
         // destroy all rectangles
+        googleVariables.cityRectangleCache.getAll().forEach(function (r) {
+            r.setMap(null);
+        });
+        
         googleVariables.cityRectangleCache.clearCache();
     }
 
@@ -46,7 +52,7 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
         // merenje za site gradovi
         // { cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30} }
 
-        if(cityId) {
+        if(cityId !== null && cityId !== undefined) {
             var rectangle = googleVariables.cityRectangleCache.get(cityId);
             renderRectangle(rectangle, merenje.pmValue);
         } else {
@@ -68,7 +74,7 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
     function sliderChangedPositionEvent(notification) {
 
-        render(initCity, notification.data);
+        render(initCity, notification);
     }
 
 

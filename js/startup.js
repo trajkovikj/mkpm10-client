@@ -12,7 +12,12 @@ var startup = {
 
         googleVariables.map.setZoom(12);
 
-        finkipm.core.startAllModules();
+        // finkipm.core.startAllModules();
+
+        finkipm.core.startModule('sidebarModule');
+        finkipm.core.startModule('brokerModule');
+        finkipm.core.startModule('sliderModule');
+        finkipm.core.startModule('displayModule');
     }
 
 };

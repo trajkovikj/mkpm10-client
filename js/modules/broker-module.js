@@ -7,7 +7,7 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
     var _managedModules = {};
     var _lastNotification;
 
-    function destroyAllModules() {
+    function destroyAllManagedModules() {
 
         for(var key in _managedModules) {
             if(_managedModules.hasOwnProperty(key)) {
@@ -24,7 +24,7 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
             lng: 21.45080527343749
         };
 
-        if(cityId) {
+        if(cityId !== null && cityId !== undefined) {
             var city = _cityModel.getById(cityId);
 
             latLng.lat = city.lat;
@@ -37,16 +37,17 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
     }
 
     function startCorrespondingModule(mapType, cityId) {
-        destroyAllModules();
+        destroyAllManagedModules();
         _managedModules[mapType].start(cityId);
     }
 
 
     function init() {
-        _managedModules[enums.mapType.SREDNA_VREDNOST] = _srednaVrednostModule;
+        _managedModules[enums.mapType.SREDNA_VREDNOST.value] = _srednaVrednostModule;
     }
 
     function destroy() {
+        destroyAllManagedModules();
         _managedModules = {};
     }
 

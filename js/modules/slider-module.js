@@ -104,7 +104,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
             text : false
         });
 
-        intervalId = setInterval(sliderNext, 1000);
+        intervalId = setInterval(sliderNext, 300);
     }
 
     function sliderButtonPauseEvent() {

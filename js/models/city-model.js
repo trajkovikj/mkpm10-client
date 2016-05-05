@@ -24,7 +24,7 @@ finkipm.core.registerModel('cityModel', (function () {
                     lon: 21.423611
                 }
             ],
-            zoomLevel : 13,
+            zoomLevel : 14,
             rectangleBounds : {
                 north: 42.040027,
                 south: 41.958893,
