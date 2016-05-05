@@ -1,35 +1,11 @@
 "use strict";
 
-// libs/*.js
-// enums.js
-// core.js
-// mediator.js
-// utils.js
-// sandbox.js
-// repositories/*.js
-// models/*.js
-// modules/*.js
-
-// main.js
-// init.js
-
-// ???
-// iterator.js
-// broker.js
-// painter.js
-// shared-objects.js
-// map-setup.js
-// requests.js
-// marker-test.js
-
 function initMap() {
 
-    var initCity = finkipm.core.getModel('cityModel').getAll()[0];
-
     googleVariables.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 14,
-        center: {lat: initCity.lat, lng: initCity.lng},
-        mapTypeId: google.maps.MapTypeId.SATELLITE,
+        zoom: 9,
+        center: {lat: 41.656496643649355, lng: 21.45080527343749},
+        mapTypeId: google.maps.MapTypeId.MAP, // SATELLITE
         streetViewControl : false,
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -41,9 +17,8 @@ function initMap() {
         }
     });
 
-    finkipm.core.startAllModules();
 
-
+    startup.execute();
 
 
     // north-west : 42.040027, 21.335283
@@ -69,8 +44,6 @@ function initMap() {
       maxIntensity : 150,
       radius : 200
     });*/
-
-
 }
 
 

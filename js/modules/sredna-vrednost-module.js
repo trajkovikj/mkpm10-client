@@ -2,148 +2,93 @@
 
 finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
-    var _templateHandler = finkipm.core.extensions.templateHandler;
-    var _localIterator = finkipm.utils.object(finkipm.core.extensions.iterator);
-    var _lastNotification;
-    var intervalId;
-
-    // cache dom elements
-    var body = $("body");
-    var sliderSelector;
-    var sliderButtonSelector;
-    var sliderSeekLeftButtonSelector;
-    var sliderSeekRightButtonSelector;
-    var sliderScrollerSelector;
-
-    var templateSource;
-    var template;
-
-    _templateHandler.getTemplate('slider-template', function(data){
-        templateSource = data;
-        template = Handlebars.compile(templateSource);
-    });
-
-    function initSlider() {
-
-        //
-
-        var html = template({playPause : '', seekLeft : '', seekRight : ''});
-        body.append(html);
-        sliderSelector = $("#slider");
-        sliderButtonSelector = sliderSelector.find("#sliderButton");
-        sliderSeekLeftButtonSelector = sliderSelector.find("#seekLeft");
-        sliderSeekRightButtonSelector = sliderSelector.find("#seekRight");
-        sliderScrollerSelector = sliderSelector.find("#sliderScroller");
+    var _cityModel = finkipm.core.getModel('cityModel');
+    var initCity;
 
 
+    function colorResolver(number) {
+        if (number <= 50) {
+            return '#00FF00';
+        } else if (number > 50 && number < 200) {
+            return '#FFFF00';
+        } else {
+            return '#FF0000';
+        }
     }
 
-    function destroySlider() {
-        sliderSelector.remove();
-        sliderButtonSelector.off('click');
-        sliderSeekLeftButtonSelector.off('click');
-        sliderSeekRightButtonSelector.off('click');
+
+    function init(cityId) {
+
+        if(cityId) {
+            // kreiraj rectangle za konkretniot grad
+            var city = _cityModel.getById(cityId);
+            googleVariables.cityRectangleCache.add(city);
+        } else {
+            // kreiraj rectangles za site gradovi
+            var cities = _cityModel.getAll();
+            for(var i=0; i < cities.length; i++)
+            {
+                googleVariables.cityRectangleCache.add(cities[i]);
+            }
+        }
     }
 
-    function render() {
-
+    function destroy() {
+        // destroy all rectangles
+        googleVariables.cityRectangleCache.clearCache();
     }
 
-    function sliderButtonPlayEvent() {
-        sliderButtonSelector.off('click');
-        sliderButtonSelector.on('click', sliderButtonPauseEvent);
-        // sliderButtonSelector.html('Pause');
+    function render(cityId, merenje) {
 
-        // sliderButtonSelector.removeClass("ui-icon-play").addClass("ui-icon-pause");
-        sliderButtonSelector.button({
-            icons : {
-                primary : 'ui-icon-pause'
-            },
-            text : false
-        });
+        // se raboti za konkreten grad, taka da objektot merenje treba da izgleda vaka:
+        // {date : new Date(05.05.2016), pmValue : 30}
 
-        intervalId = setInterval(sliderNext, 1000);
+        // merenje za site gradovi
+        // { cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30} }
+
+        if(cityId) {
+            var rectangle = googleVariables.cityRectangleCache.get(cityId);
+            renderRectangle(rectangle, merenje.pmValue);
+        } else {
+            var cityRectangleList = googleVariables.cityRectangleCache.getAllWithCityId();
+            cityRectangleList.forEach(function(cr) {
+                var pmValue = merenje[cr.id].pmValue;
+                renderRectangle(cr.rectangle, pmValue);
+            });
+        }
     }
 
-    function sliderButtonPauseEvent() {
-        sliderButtonSelector.off('click');
-        sliderButtonSelector.on('click', sliderButtonPlayEvent);
-        // sliderButtonSelector.html('Play');
+    function renderRectangle(rectangle, pmValue) {
 
-        // sliderButtonSelector.removeClass("ui-icon-pause").addClass("ui-icon-play");
-        sliderButtonSelector.button({
-            icons : {
-                primary : 'ui-icon-play'
-            },
-            text : false
-        });
-
-        clearInterval(intervalId);
-    }
-
-    function sidebarSubmitRequestEvent(notification) {
-
-        // se cuva poslednata notiikacija, bidejki ke bide potrebno pri change event na slider-ot
-        // da se znae na koj kanal da se emituva podatokot
-        // ova e se poradi razlicniot format na merenja pri razlicen mapType
-        _lastNotification = notification;
-        _localIterator.resetIteratorData(notification.response)
-
-        sliderScrollerSelector.slider("option", "max", notification.response.length - 1);
-        sliderScrollerSelector.slider("option", "min", 0);
-        sliderScrollerSelector.slider("option", "value", 0);
-
-        var merenje = _localIterator.current();
-
-        if(!merenje) return;
-
-        sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
+        rectangle.setOptions({
+            fillColor : colorResolver(pmValue)
         });
     }
 
-    function sliderNext() {
-        var merenje = _localIterator.next();
-        if(!merenje) return;
 
-        sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
+    function sliderChangedPositionEvent(notification) {
 
-        sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
-        });
+        render(initCity, notification.data);
     }
 
-    function sliderPrevious() {
-        var merenje = _localIterator.prev();
-        if(!merenje) return;
-
-        sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
-
-        sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
-        });
-    }
 
     return {
 
         initListeners : function () {
-            sandbox.addListener('sidebar-submit-request', sidebarSubmitRequestEvent, this);
+            sandbox.addListener('slider-change-position', sliderChangedPositionEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('sidebar-submit-request', sidebarSubmitRequestEvent);
+            sandbox.removeListener('slider-change-position', sliderChangedPositionEvent);
         },
 
-        start : function () {
-            initSlider();
+        start : function (cityId) {
+            init(cityId);
             this.initListeners();
         },
 
         destroy : function () {
-            destroySlider();
+            destroy();
             this.removeListeners();
         }
     };

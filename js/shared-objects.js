@@ -1,6 +1,6 @@
 "use strict";
 
-var selectors = {
+/*var selectors = {
     logo : $("#logo"),
     sidebar :  $("#sidebar"),
     pmValueDisplayElement : $("#pm-value"),
@@ -9,7 +9,7 @@ var selectors = {
     citySelector : $("#city"),
     yearSelector : $("#year"),
     monthSelector : $("#month")
-};
+};*/
 
 var googleVariables = {
     map : {},
@@ -23,11 +23,21 @@ var googleVariables = {
             },
 
             get : function (id) {
-                var cityRectangle = utils.first(_cache, function (cr) {
+                var cityRectangle = finkipm.utils.linq.first(_cache, function (cr) {
                     return cr.id === id;
                 });
 
                 if(cityRectangle) return cityRectangle.rectangle;
+            },
+
+            getAll : function () {
+                return finkipm.utils.linq.select(_cache, function (cr) {
+                    return cr.rectangle;
+                });
+            },
+
+            getAllWithCityId : function () {
+                return finkipm.utils.object(_cache);
             },
 
             add : function (city) {
@@ -43,7 +53,7 @@ var googleVariables = {
                         strokeColor: '#FFFFFF',
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
-                        fillColor: '#FF0000',
+                        //fillColor: '#FF0000',
                         fillOpacity: 0.35,
                         map: googleVariables.map,
                         bounds: {
@@ -63,16 +73,16 @@ var googleVariables = {
             },
 
             remove : function (id) {
-                utils.removeFirst(_cache, function (cr) {
+                finkipm.utils.linq.removeFirst(_cache, function (cr) {
                     return cr.id === id;
                 })
+            },
+
+            clearCache : function() {
+                _cache = [];
             }
         };
     })(),
     heatmap : {}
-};
-
-var globalVariables = {
-
 };
 

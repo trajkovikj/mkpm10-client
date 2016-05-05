@@ -172,11 +172,11 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     return {
 
         initListeners : function () {
-            sandbox.addListener('sidebar-submit-request', sidebarSubmitRequestEvent, this);
+            sandbox.addListener('broker-request', sidebarSubmitRequestEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('sidebar-submit-request', sidebarSubmitRequestEvent);
+            sandbox.removeListener('broker-request', sidebarSubmitRequestEvent);
         },
         
         play : function () {
