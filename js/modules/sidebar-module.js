@@ -2,11 +2,9 @@
 
 finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
-    var _utils = finkipm.utils;
-    var _linq = finkipm.utils.linq;
-    var _templateHandler = finkipm.core.extensions.templateHandler;
-    var _cityModel = _utils.object(finkipm.core.getModel('cityModel'));
-    var _dateRepository = _utils.object(finkipm.core.getRepository('dateRepository'));
+    var _linq = sandbox.linq;
+    var _cityModel = sandbox.getModel('cityModel');
+    var _dateRepository = sandbox.getRepository('dateRepository');
 
     // cache dom elements
     var body = $("body");
@@ -15,12 +13,12 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var templateMonthSelectorSource;
     var monthTemplate;
 
-    _templateHandler.getTemplate('sidebar-template', function(data){
+    sandbox.getTemplate('sidebar-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
     });
 
-    _templateHandler.getTemplate('sidebar-month-template', function(data){
+    sandbox.getTemplate('sidebar-month-template', function(data){
         templateMonthSelectorSource = data;
         monthTemplate = Handlebars.compile(templateSource);
     });
@@ -121,7 +119,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             var html = template(context);
             body.prepend(html);
 
-            sidebarSelector = $("#sidebar")
+            sidebarSelector = $("#sidebar");
             openCloseSliderButton = sidebarSelector.find("#open-close");
             mapTypeSelector = sidebarSelector.find("#radio-map-type");
             citySelector = sidebarSelector.find("#city");
@@ -152,7 +150,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     function openSidebarEvent() {
         sidebarSelector.animate({ "left": "+=15%" }, "slow" );
 
-        // openCloseSliderButton.html("&lt");
         openCloseSliderButton.button({
             icons : {
                 primary : 'ui-icon-triangle-1-w'
@@ -167,7 +164,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     function closeSidebarEvent() {
         sidebarSelector.animate({ "left": "-=15%" }, "slow" );
 
-        // openCloseSliderButton.html("&gt");
         openCloseSliderButton.button({
             icons : {
                 primary : 'ui-icon-triangle-1-e'

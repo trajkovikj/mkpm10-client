@@ -2,7 +2,7 @@
 
 finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
-    var _cityModel = finkipm.core.getModel('cityModel');
+    var _cityModel = sandbox.getModel('cityModel');
     var initCity;
 
 

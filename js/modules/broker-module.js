@@ -2,10 +2,9 @@
 
 finkipm.core.registerModule('brokerModule', function (sandbox) {
 
-    var _srednaVrednostModule = finkipm.core.getModule('srednaVrednostModule');
-    var _cityModel = finkipm.core.getModel('cityModel');
+    var _srednaVrednostModule = sandbox.getModule('srednaVrednostModule');
+    var _cityModel = sandbox.getModel('cityModel');
     var _managedModules = {};
-    var _lastNotification;
 
     function destroyAllManagedModules() {
 

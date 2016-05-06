@@ -10,7 +10,7 @@ var startup = {
             lng: initCity.lng
         });
 
-        googleVariables.map.setZoom(12);
+        googleVariables.map.setZoom(initCity.zoomLevel);
 
         // finkipm.core.startAllModules();
 

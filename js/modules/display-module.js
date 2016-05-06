@@ -2,8 +2,6 @@
 
 finkipm.core.registerModule('displayModule', function (sandbox) {
 
-    var _templateHandler = finkipm.core.extensions.templateHandler;
-
     // cache dom elements
     var bodySelector = $("body");
     var displaySelector;
@@ -11,13 +9,13 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     var templateSource;
     var template;
 
-    _templateHandler.getTemplate('display-template', function(data){
+    sandbox.getTemplate('display-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
     });
 
 
-    function initDOM() {
+    function init() {
 
         var context = {
             date : '',
@@ -31,7 +29,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
         displaySelector.html(html);
     }
 
-    function destroyDOM() {
+    function destroy() {
         displaySelector.remove();
         displaySelector = undefined;
     }
@@ -65,12 +63,12 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
         },
 
         start : function () {
-            initDOM();
+            init();
             this.initListeners();
         },
 
         destroy : function () {
-            destroyDOM();
+            destroy();
             this.removeListeners();
         }
     };

@@ -2,8 +2,7 @@
 
 finkipm.core.registerModule('sliderModule', function (sandbox) {
 
-    var _templateHandler = finkipm.core.extensions.templateHandler;
-    var _localIterator = finkipm.utils.object(finkipm.core.extensions.iterator);
+    var _localIterator = sandbox.getIterator();
     var _lastNotification;
     var intervalId;
 
@@ -18,7 +17,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     var templateSource;
     var template;
 
-    _templateHandler.getTemplate('slider-template', function(data){
+    sandbox.getTemplate('slider-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
     });
@@ -33,7 +32,6 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         sliderSeekRightButtonSelector = sliderSelector.find("#seekRight");
         sliderScrollerSelector = sliderSelector.find("#sliderScroller");
 
-        // sliderButtonSelector.addClass("ui-icon").addClass("ui-icon-play");
         sliderButtonSelector.button({
             icons : {
                 primary : 'ui-icon-play'
@@ -94,9 +92,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     function sliderButtonPlayEvent() {
         sliderButtonSelector.off('click');
         sliderButtonSelector.on('click', sliderButtonPauseEvent);
-        // sliderButtonSelector.html('Pause');
 
-        // sliderButtonSelector.removeClass("ui-icon-play").addClass("ui-icon-pause");
         sliderButtonSelector.button({
             icons : {
                 primary : 'ui-icon-pause'
@@ -110,9 +106,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     function sliderButtonPauseEvent() {
         sliderButtonSelector.off('click');
         sliderButtonSelector.on('click', sliderButtonPlayEvent);
-        // sliderButtonSelector.html('Play');
 
-        // sliderButtonSelector.removeClass("ui-icon-pause").addClass("ui-icon-play");
         sliderButtonSelector.button({
             icons : {
                 primary : 'ui-icon-play'
@@ -179,27 +173,6 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
             sandbox.removeListener('broker-request', sidebarSubmitRequestEvent);
         },
         
-        play : function () {
-            sandbox.notify({
-                eventId : 'slider-play',
-                data : {}
-            });
-        },
-        
-        pause : function () {
-            sandbox.notify({
-                eventId : 'slider-pause',
-                data : {}
-            });
-        },
-        
-        changePosition : function () {
-            sandbox.notify({
-                eventId : 'slider-change-position',
-                data : {}
-            });
-        },
-        
         start : function () {
             initSlider();
             this.initListeners();
@@ -212,4 +185,6 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         }
     };
 });
+
+
 
