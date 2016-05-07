@@ -22,5 +22,96 @@ var startup = {
 
 };
 
+/*
 
 
+mapType
+city (ponatamu moze da ima i all cities)
+year
+month/allmonths
+hour/day (enum; show only if concrete month selected)
+
+
+
+
+
+/// todo ///////////////////
+
+1. odredi go interfejsot za serverot (ruti & podatoci), kako i interfejsot pomegju modelite preku medijatorot
+2. sredi gi repozitorijata da koristat ajax
+3. izbrisi gi modelite i prevrti gi vo repository-ja
+4. kreiraj gi modulite za merenjaPoStanica i heatmap
+5. sredi go css-ot & app da bide responsive
+6. sredi sidebar animacijata za openClose
+7. kreiraj repository za merni stanici
+
+
+
+sredna vrednost :
+
+    konkreten grad :
+
+    - slider obj : {
+    date : ...
+    pmValue : ...
+}
+
+
+site gradovi :   // ke razmislime
+    - slider obj : {
+    date : ...
+    pmValue : ...
+}
+
+
+
+po merna stanica :
+
+    konkreten grad :
+    - slider obj : {
+    date : ...
+    pmValues : {
+        stanica 1 : { pmValue : '...' },
+        stanica 2 : { pmValue : '...' },
+        stanica 3 : { pmValue : '...' }
+    }
+}
+
+
+
+site gradovi :   // ke razmislime
+    - slider obj : {
+    date : ...
+    pmValue : ...
+}
+
+- display obj : {
+    date : ...
+    pmValue : ...
+}
+
+
+heatmap :
+
+    konkreten grad :
+    - slider obj : {
+    date : ...
+    pmValue : ...
+}
+
+- display obj : {
+    date : ...
+    pmValue : ...
+}
+
+
+site gradovi :   // ke razmislime
+    - slider obj : {
+    date : ...
+    pmValue : ...
+}
+
+- display obj : {
+    date : ...
+    pmValue : ...
+}		*/

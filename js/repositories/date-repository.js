@@ -18,6 +18,15 @@ finkipm.core.registerRepository('dateRepository',(function () {
 
         getAllYearsWithMonths : function () {
 
+            // data
+            /*return $.ajax({
+                type : 'GET',
+                url : serverUrl + 'v1/allYearsWithMonths',
+                contentType : 'aapplication/json',
+                dataType : 'json',
+                data : {}
+            });*/
+
             var data = [
                 {
                     year: '2013',
