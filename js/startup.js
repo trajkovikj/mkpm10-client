@@ -44,6 +44,7 @@ hour/day (enum; show only if concrete month selected)
 5. sredi go css-ot & app da bide responsive
 6. sredi sidebar animacijata za openClose
 7. kreiraj repository za merni stanici
+8. sredi go cityRectangleCache
 
 
 
@@ -51,67 +52,50 @@ sredna vrednost :
 
     konkreten grad :
 
-    - slider obj : {
-    date : ...
-    pmValue : ...
-}
+    merenja = [{
+        date : ...
+        value : ...
+    },
+    ... ]
 
 
-site gradovi :   // ke razmislime
-    - slider obj : {
-    date : ...
-    pmValue : ...
-}
+    site gradovi :   // ke razmislime
+       
 
 
 
 po merna stanica :
 
     konkreten grad :
-    - slider obj : {
-    date : ...
-    pmValues : {
-        stanica 1 : { pmValue : '...' },
-        stanica 2 : { pmValue : '...' },
-        stanica 3 : { pmValue : '...' }
-    }
-}
+
+        merenja = [{
+            date : ...
+            values : [{
+                stanicaId : ..., 
+                pmValue : ...
+            }, ... ]
+        },
+        ... ]
 
 
 
-site gradovi :   // ke razmislime
-    - slider obj : {
-    date : ...
-    pmValue : ...
-}
-
-- display obj : {
-    date : ...
-    pmValue : ...
-}
+    site gradovi :   // nema
+      
 
 
-heatmap :
+heatmap : // isto kako po stanica samo pmValue da se mapira vo odreden heatmap weight
 
     konkreten grad :
-    - slider obj : {
-    date : ...
-    pmValue : ...
-}
 
-- display obj : {
-    date : ...
-    pmValue : ...
-}
+         merenja = [{
+             date : ...
+             values : [{
+                 stanicaId : ..., 
+                 pmValue : ...
+             }, ... ]
+         },
+         ... ]
 
+    site gradovi :   // nema
 
-site gradovi :   // ke razmislime
-    - slider obj : {
-    date : ...
-    pmValue : ...
-}
-
-- display obj : {
-    date : ...
-    pmValue : ...
-}		*/
+*/

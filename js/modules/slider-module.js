@@ -117,7 +117,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         clearInterval(intervalId);
     }
     
-    function sidebarSubmitRequestEvent(notification) {
+    function brokerRequestEvent(notification) {
 
         // se cuva poslednata notiikacija, bidejki ke bide potrebno pri change event na slider-ot
         // da se znae na koj kanal da se emituva podatokot
@@ -166,11 +166,11 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     return {
 
         initListeners : function () {
-            sandbox.addListener('broker-request', sidebarSubmitRequestEvent, this);
+            sandbox.addListener('broker-request', brokerRequestEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('broker-request', sidebarSubmitRequestEvent);
+            sandbox.removeListener('broker-request', brokerRequestEvent);
         },
         
         start : function () {

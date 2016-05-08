@@ -2,6 +2,9 @@
 
 finkipm.core.registerRepository('dateRepository',(function () {
 
+    var apiUrl = finkipm.core.config.apiUrl;
+    var _promiseCache = {};
+
     function mapSend(city) {
         return {
             // mappings here - from app to api
@@ -18,7 +21,22 @@ finkipm.core.registerRepository('dateRepository',(function () {
 
         getAllYearsWithMonths : function () {
 
-            // data
+            var url = apiUrl + 'dummy-data/allYearsWithMonths.json';
+
+            var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json'
+            });
+
+            _promiseCache[url] = promise;
+
+            return promise.then(function (data) {
+
+                return data;
+            });
+
+
             /*return $.ajax({
                 type : 'GET',
                 url : serverUrl + 'v1/allYearsWithMonths',
@@ -27,36 +45,9 @@ finkipm.core.registerRepository('dateRepository',(function () {
                 data : {}
             });*/
 
-            var data = [
-                {
-                    year: '2013',
-                    months : ['Јануари', 'Фебруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември']
-                },
-                {
-                    year: '2014',
-                    months : ['Јануари', 'Фебруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември']
-                },
-                {
-                    year: '2015',
-                    months : ['Јануари', 'Фебруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември']
-                },
-                {
-                    year: '2016',
-                    months : ['Јануари', 'Фебруари', 'Март', 'Април', 'Мај']
-                }
-            ];
-
-            return {
-                done : function (callback) {
-                    callback(data);
-                },
-
-                fail : function (callback) {
-                    var jqXHR, textStatus, errorThrown;
-                    callback(jqXHR, textStatus, errorThrown);
-                }
-            }
         }
+
+
     };
 
 })());

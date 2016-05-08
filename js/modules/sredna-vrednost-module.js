@@ -2,7 +2,9 @@
 
 finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
 
-    var _cityModel = sandbox.getModel('cityModel');
+    var _toastModule = sandbox.getModule('toastModule');
+
+    var _cityRepository = sandbox.getRepository('cityRepository');
     var initCity;
 
 
@@ -17,31 +19,43 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
     }
 
 
-    function init(cityId) {
+    function init(cityId, callback) {
 
         initCity = cityId;
 
         if(cityId !== null && cityId !== undefined) {
-            // kreiraj rectangle za konkretniot grad
-            var city = _cityModel.getById(cityId);
-            googleVariables.cityRectangleCache.add(city);
+
+            var cityPromise = _cityRepository.get(cityId);
+
+            cityPromise.then(function(city){
+                googleVariables.cityRectangleCache.add(city);
+                if(callback) callback();
+            });
+
         } else {
-            // kreiraj rectangles za site gradovi
-            var cities = _cityModel.getAll();
-            for(var i=0; i < cities.length; i++)
-            {
-                googleVariables.cityRectangleCache.add(cities[i]);
-            }
+
+            var citiesPromise = _cityRepository.getAll();
+
+            citiesPromise.then(function(city){
+
+                for(var i=0; i < cities.length; i++) {
+                    googleVariables.cityRectangleCache.add(cities[i]);
+                }
+                if(callback) callback();
+            });
         }
+
     }
 
-    function destroy() {
+    function destroy(callback) {
         // destroy all rectangles
         googleVariables.cityRectangleCache.getAll().forEach(function (r) {
             r.setMap(null);
         });
         
         googleVariables.cityRectangleCache.clearCache();
+
+        if(callback) callback();
     }
 
     function render(cityId, merenje) {
@@ -88,14 +102,14 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
             sandbox.removeListener('slider-change-position', sliderChangedPositionEvent);
         },
 
-        start : function (cityId) {
-            init(cityId);
+        start : function (cityId, callback) {
             this.initListeners();
+            init(cityId, callback);
         },
 
-        destroy : function () {
-            destroy();
+        destroy : function (callback) {
             this.removeListeners();
+            destroy(callback);
         }
     };
 });

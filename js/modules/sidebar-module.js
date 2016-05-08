@@ -2,8 +2,10 @@
 
 finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
+    var _toastModule = sandbox.getModule('toastModule');
+
     var _linq = sandbox.linq;
-    var _cityModel = sandbox.getModel('cityModel');
+    var _cityRepository = sandbox.getRepository('cityRepository');
     var _dateRepository = sandbox.getRepository('dateRepository');
 
     // cache dom elements
@@ -57,18 +59,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         return mapTypeList;
     }
 
-    function getCities(){
-
-        // mozda ke treba da ide so callback zasto getAll pristapuva do ajax
-        return _linq.select(_cityModel.getAll(), function(c){
-            return {
-                id : c.id,
-                value : c.id,
-                content : c.name
-            }
-        });
-    }
-
     function getYears(years){
 
         var result = [];
@@ -101,19 +91,33 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     }
 
 
-    function render() {
+    function init(callback) {
 
-        _dateRepository.getAllYearsWithMonths().done(function(data) {
+        var allYearsWithMonthsPromise = _dateRepository.getAllYearsWithMonths();
+        var citiesPromise = _cityRepository.getAll();
+
+        allYearsWithMonthsPromise.then(function (data) {
 
             allYearsWithMonths = data;
+            return citiesPromise;
+
+        }).then(function (citiesData) {
+
+            var cities = _linq.select(citiesData, function(c){
+                return {
+                    id : c.id,
+                    value : c.id,
+                    content : c.name
+                }
+            });
 
             var context = {
                 mapTypes : getMapTypes(),
-                cities : getCities(),
-                years : getYears(_linq.select(data, function(x){
+                cities : cities,
+                years : getYears(_linq.select(allYearsWithMonths, function(x){
                     return x.year;
                 })),
-                months : getMonths(data[0].months)
+                months : getMonths(allYearsWithMonths[0].months)
             };
 
             var html = template(context);
@@ -133,7 +137,28 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
                 },
                 text : false
             });
+
+            callback();
         });
+
+
+        /*allYearsWithMonthsPromise.fail(function(jqXHR, textStatus, errorThrown){
+            // _toastModule.createToast(textStatus, 1000);
+        });
+
+        citiesPromise.fail(function(jqXHR, textStatus, errorThrown){
+            // _toastModule.createToast(textStatus, 1000);
+        });*/
+    }
+
+    function destroy(callback) {
+
+        sidebarSelector.remove();
+        callback();
+    }
+
+    function render() {
+
     }
 
     function renderMonthSelector(selectedYearId){
@@ -181,48 +206,56 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     }
 
 
-    return {
+    function submitRequestEvent() {
 
-        submitRequest : function() {
-            var request = {
-                mapType : mapTypeSelector.find("input[name=map-type]:checked").val(),
-                cityId : parseInt(citySelector.val()),
-                year : yearSelector.val(),
-                month : monthSelector.val()
+        var request = {
+            mapType : mapTypeSelector.find("input[name=map-type]:checked").val(),
+            cityId : parseInt(citySelector.val()),
+            year : yearSelector.val(),
+            month : monthSelector.val()
+        };
+
+        // ova e test
+        // request.getAllAvg treba da se zameni so nekoe repository ili model
+        // koj sto ke go primi requestot i preku ajax ke vrati rezultati od serverot
+        // na callback ke ja konstruira notifikacijata i ke ja publish-ne na medijatorot
+        requests.getAllAvg(request.year, request.month).done(function (data) {
+
+            var notification = {
+                request : request,
+                response : data
             };
 
-            // ova e test
-            // request.getAllAvg treba da se zameni so nekoe repository ili model
-            // koj sto ke go primi requestot i preku ajax ke vrati rezultati od serverot
-            // na callback ke ja konstruira notifikacijata i ke ja publish-ne na medijatorot
-            requests.getAllAvg(request.year, request.month).done(function (data) {
-
-                var notification = {
-                    request : request,
-                    response : data
-                };
-
-                sandbox.notify({
-                    eventId : 'sidebar-submit-request',
-                    data : notification
-                });
+            sandbox.notify({
+                eventId : 'sidebar-submit-request',
+                data : notification
             });
+        });
+    }
 
+    return {
 
-        },
+        submitRequest : submitRequestEvent,
 
         start : function () {
-            render();
-            openCloseSliderButton.on("click", closeSidebarEvent);
-            yearSelector.on('change', yearChangeEvent);
-            submitButton.on('click', this.submitRequest)
+
+            init(function () {
+
+                openCloseSliderButton.on("click", closeSidebarEvent);
+                yearSelector.on('change', yearChangeEvent);
+                submitButton.on('click', submitRequestEvent);
+            });
+
         },
 
         destroy : function () {
-            sidebarSelector.remove();
-            openCloseSliderButton.off("click");
-            yearSelector.off('change');
-            submitButton.off('click');
+
+            destroy(function () {
+
+                openCloseSliderButton.off("click");
+                yearSelector.off('change');
+                submitButton.off('click');
+            });
         }
 
     };

@@ -1,0 +1,27 @@
+{
+  "id" : 0,
+  "name" : "Скопје",
+  "lat" : 41.999218,
+  "lng" : 21.429010,
+  "merniStanici" : [
+    {
+      "id" : 0,
+      "description" : "Карпош",
+      "lat": 42.006667,
+      "lng": 21.386944
+    },
+    {
+      "id" : 1,
+      "description" : "Центар",
+      "lat" : 41.9925,
+      "lon" : 21.423611
+    }
+  ],
+  "zoomLevel" : 14,
+  "rectangleBounds" : {
+    "north" : 42.040027,
+    "south" : 41.958893,
+    "east" : 21.512438,
+    "west" : 21.335283
+  }
+}

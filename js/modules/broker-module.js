@@ -2,8 +2,10 @@
 
 finkipm.core.registerModule('brokerModule', function (sandbox) {
 
+    var _toastModule = sandbox.getModule('toastModule');
+
     var _srednaVrednostModule = sandbox.getModule('srednaVrednostModule');
-    var _cityModel = sandbox.getModel('cityModel');
+    var _cityRepository = sandbox.getRepository('cityRepository');
     var _managedModules = {};
 
     function destroyAllManagedModules() {
@@ -23,21 +25,33 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
             lng: 21.45080527343749
         };
 
-        if(cityId !== null && cityId !== undefined) {
-            var city = _cityModel.getById(cityId);
+        if(cityId === null && cityId === undefined) {
 
+            googleVariables.map.setCenter(latLng);
+            googleVariables.map.setZoom(zoomLevel);
+            return;
+        }
+
+        var cityPromise = _cityRepository.get(cityId);
+
+        cityPromise.then(function(city){
             latLng.lat = city.lat;
             latLng.lng = city.lng;
             zoomLevel = city.zoomLevel;
-        }
 
-        googleVariables.map.setCenter(latLng);
-        googleVariables.map.setZoom(zoomLevel);
+            googleVariables.map.setCenter(latLng);
+            googleVariables.map.setZoom(zoomLevel);
+        });
+
+        /*cityPromise.fail(function(jqXHR, textStatus, errorThrown){
+            // _toastModule.createToast(textStatus, 1000);
+        });*/
+
     }
 
-    function startCorrespondingModule(mapType, cityId) {
+    function startCorrespondingModule(mapType, cityId, callback) {
         destroyAllManagedModules();
-        _managedModules[mapType].start(cityId);
+        _managedModules[mapType].start(cityId, callback);
     }
 
 
@@ -54,11 +68,12 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
     function sidebarSubmitRequestEvent(notification) {
 
         positionMap(notification.request.cityId);
-        startCorrespondingModule(notification.request.mapType, notification.request.cityId);
+        startCorrespondingModule(notification.request.mapType, notification.request.cityId, function () {
 
-        sandbox.notify({
-            eventId : 'broker-request',
-            data : notification
+            sandbox.notify({
+                eventId : 'broker-request',
+                data : notification
+            });
         });
     }
 
@@ -74,14 +89,16 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
         },
 
         start : function () {
-            init();
             this.initListeners();
+            init();
         },
 
         destroy : function () {
-            destroy();
             this.removeListeners();
-        }
+            destroy();
+        },
+
+        d : destroyAllManagedModules
     };
 });
 

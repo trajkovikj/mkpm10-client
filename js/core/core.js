@@ -89,6 +89,7 @@ finkipm.core = (function () {
         },
 
         extensions : {
+            config : {},
             mediator : {},
             iterator : {},
             templateHandler : {}
