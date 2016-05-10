@@ -37,14 +37,15 @@ hour/day (enum; show only if concrete month selected)
 
 /// todo ///////////////////
 
-1. odredi go interfejsot za serverot (ruti & podatoci), kako i interfejsot pomegju modelite preku medijatorot
-2. sredi gi repozitorijata da koristat ajax
-3. izbrisi gi modelite i prevrti gi vo repository-ja
-4. kreiraj gi modulite za merenjaPoStanica i heatmap
-5. sredi go css-ot & app da bide responsive
-6. sredi sidebar animacijata za openClose
-7. kreiraj repository za merni stanici
-8. sredi go cityRectangleCache
+odredi go interfejsot za serverot (ruti & podatoci), kako i interfejsot pomegju modelite preku medijatorot
+- sredi gi repozitorijata da koristat ajax
+- izbrisi gi modelite i prevrti gi vo repository-ja
+kreiraj gi modulite za merenjaPoStanica i heatmap
+kreiraj repository za merni stanici
+sredi go cityRectangleCache
+sredi go css-ot & app da bide responsive
+sredi sidebar animacijata za openClose
+
 
 
 
@@ -99,3 +100,57 @@ heatmap : // isto kako po stanica samo pmValue da se mapira vo odreden heatmap w
     site gradovi :   // nema
 
 */
+
+
+/*
+
+/// GENERATORS ////////////////////
+/// the net ninja ////////////////
+
+ex. 1
+
+ function* gen() {
+     console.log("init");
+     var x = yield 10;
+     console.log(x);
+ }
+
+ var myGen = gen();
+ console.log(myGen.next());
+ console.log(myGen.next(5));
+
+
+
+ ex. 2
+
+
+ genWrap(function() {
+
+     var tweets = yield $.get("data/tweets.json");
+     console.log(tweets);
+     var friends = yield $.get("data/friends.json");
+     console.log(friends);
+     var videos = yield $.get("data/videos.json");
+     console.log(videos);
+ });
+
+
+ function genWrap(generator) {
+
+     var gen = generator();
+
+     function handle(yieleded) {
+         if(!yieleded.done) {
+             yieleded.value.then(function(data) {
+                return handle(gen.next(data));
+             });
+         }
+     }
+
+     return handle(gen.next());
+ }
+
+
+ */
+
+
