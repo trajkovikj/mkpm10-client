@@ -9,11 +9,20 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     var templateSource;
     var template;
 
-    sandbox.getTemplate('display-template', function(data){
+    /*sandbox.getTemplate('display-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
-    });
+    });*/
 
+    function initTemplates(callback){
+
+        sandbox.getTemplatePromise('display-template').then(function(data) {
+
+            templateSource = data;
+            template = Handlebars.compile(templateSource);
+            callback();
+        });
+    }
 
     function init() {
 
@@ -30,6 +39,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     }
 
     function destroy() {
+
         displaySelector.remove();
         displaySelector = undefined;
     }
@@ -40,37 +50,77 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
         displaySelector.html(html);
     }
 
-    function sliderChangePositionEvent(sliderData) {
-        var context = formatSliderData(sliderData);
+    function avgChangeMeasurementEvent(measurement) {
+
+        var context = {
+            date : formatDate(measurement.date),
+            pmValue : measurement.pmValue
+        };
+
         render(context);
     }
 
-    function formatSliderData(sliderData) {
-        return {
-            date : sliderData.date.format("dd.mm.yyyy"),
-            pmValue : sliderData.pmValue
-        };
+    function stationChangeMeasurementEvent(notification) {
+
+    }
+
+    function heatmapChangeMeasurementEvent(notification) {
+
+    }
+
+    function formatDate(date) {
+        return date.format("dd.mm.yyyy");
     }
 
     return {
 
         initListeners : function () {
-            sandbox.addListener('slider-change-position', sliderChangePositionEvent, this);
+            sandbox.addListener('brokerModule::avg-change-measurement', avgChangeMeasurementEvent, this);
+            sandbox.addListener('brokerModule::station-change-measurement', stationChangeMeasurementEvent, this);
+            sandbox.addListener('brokerModule::heatmap-change-measurement', heatmapChangeMeasurementEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('slider-change-position', sliderChangePositionEvent);
+            sandbox.removeListener('brokerModule::avg-change-measurement', avgChangeMeasurementEvent);
+            sandbox.removeListener('brokerModule::station-change-measurement', stationChangeMeasurementEvent);
+            sandbox.removeListener('brokerModule::heatmap-change-measurement', heatmapChangeMeasurementEvent);
         },
 
         start : function () {
-            init();
             this.initListeners();
+            initTemplates(function() {
+                init();
+            });
+
         },
 
         destroy : function () {
-            destroy();
             this.removeListeners();
+            destroy();
         }
     };
 });
 
+
+/*switch (mapType) {
+    case enums.mapType.SREDNA_VREDNOST.value :
+        sandbox.notify({
+            eventId : 'brokerModule::avg-change-measurement',
+            data : merenje
+        });
+        break;
+
+    case enums.mapType.PO_MERNA_STANICA.value :
+        sandbox.notify({
+            eventId : 'brokerModule::station-change-measurement',
+            data : merenje
+        });
+        break;
+
+    case enums.mapType.HEATMAP.value :
+        sandbox.notify({
+            eventId : 'brokerModule::heatmap-change-measurement',
+            data : merenje
+        });
+        break;
+}*/

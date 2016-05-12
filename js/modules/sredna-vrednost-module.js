@@ -86,20 +86,27 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
     }
 
 
-    function sliderChangedPositionEvent(notification) {
+    function brokerPublichedNewMeasurementEvent(notification) {
 
         render(initCity, notification);
     }
+
+    /*function sliderChangedPositionEvent(notification) {
+
+        render(initCity, notification);
+    }*/
 
 
     return {
 
         initListeners : function () {
-            sandbox.addListener('slider-change-position', sliderChangedPositionEvent, this);
+            sandbox.addListener('brokerModule::avg-change-measurement', brokerPublichedNewMeasurementEvent, this);
+            //sandbox.addListener('sliderModule::change-position', sliderChangedPositionEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('slider-change-position', sliderChangedPositionEvent);
+            sandbox.removeListener('brokerModule::avg-change-measurement', brokerPublichedNewMeasurementEvent);
+            //sandbox.removeListener('sliderModule::change-position', sliderChangedPositionEvent);
         },
 
         start : function (cityId, callback) {
@@ -110,6 +117,10 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
         destroy : function (callback) {
             this.removeListeners();
             destroy(callback);
+        },
+
+        change : function(measurement) {
+            render(initCity, notification);
         }
     };
 });

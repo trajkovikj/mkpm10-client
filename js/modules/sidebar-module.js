@@ -15,7 +15,8 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var templateMonthSelectorSource;
     var monthTemplate;
 
-    sandbox.getTemplate('sidebar-template', function(data){
+
+    /*sandbox.getTemplate('sidebar-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
     });
@@ -23,7 +24,8 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     sandbox.getTemplate('sidebar-month-template', function(data){
         templateMonthSelectorSource = data;
         monthTemplate = Handlebars.compile(templateSource);
-    });
+    });*/
+
 
     var sidebarSelector;
     var openCloseSliderButton;
@@ -90,6 +92,21 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         return result;
     }
 
+
+    function initTemplates(callback) {
+
+        sandbox.getTemplatePromise('sidebar-template').then(function(data) {
+            templateSource = data;
+            template = Handlebars.compile(templateSource);
+
+            return sandbox.getTemplatePromise('sidebar-month-template');
+        }).then(function(data) {
+            templateMonthSelectorSource = data;
+            monthTemplate = Handlebars.compile(templateSource);
+
+            callback();
+        });
+    }
 
     function init(callback) {
 
@@ -227,7 +244,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             };
 
             sandbox.notify({
-                eventId : 'sidebar-submit-request',
+                eventId : 'sidebarModule::submit-request',
                 data : notification
             });
         });
@@ -239,13 +256,15 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
         start : function () {
 
-            init(function () {
+            initTemplates(function() {
 
-                openCloseSliderButton.on("click", closeSidebarEvent);
-                yearSelector.on('change', yearChangeEvent);
-                submitButton.on('click', submitRequestEvent);
+                init(function () {
+
+                    openCloseSliderButton.on("click", closeSidebarEvent);
+                    yearSelector.on('change', yearChangeEvent);
+                    submitButton.on('click', submitRequestEvent);
+                });
             });
-
         },
 
         destroy : function () {

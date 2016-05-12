@@ -17,12 +17,22 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
     var templateSource;
     var template;
 
-    sandbox.getTemplate('slider-template', function(data){
+    /*sandbox.getTemplate('slider-template', function(data){
         templateSource = data;
         template = Handlebars.compile(templateSource);
-    });
+    });*/
 
-    function initSlider() {
+    function initTemplates(callback){
+
+        sandbox.getTemplatePromise('slider-template').then(function(data) {
+
+            templateSource = data;
+            template = Handlebars.compile(templateSource);
+            callback();
+        });
+    }
+
+    function init() {
 
         var html = template({playPause : '', seekLeft : '', seekRight : ''});
         body.append(html);
@@ -69,16 +79,13 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
                 if(!merenje) return;
 
-                sandbox.notify({
-                    eventId : 'slider-change-position',
-                    data : merenje
-                });
+                publishIndex();
             }
 
         });
     }
 
-    function destroySlider() {
+    function destroy() {
         sliderSelector.remove();
         sliderButtonSelector.off('click');
         sliderSeekLeftButtonSelector.off('click');
@@ -123,7 +130,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         // da se znae na koj kanal da se emituva podatokot
         // ova e se poradi razlicniot format na merenja pri razlicen mapType
         _lastNotification = notification;
-        _localIterator.resetIteratorData(notification.response)
+        _localIterator.resetIteratorData(notification.response);
 
         sliderScrollerSelector.slider("option", "max", notification.response.length - 1);
         sliderScrollerSelector.slider("option", "min", 0);
@@ -133,10 +140,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
         if(!merenje) return;
 
-        sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
-        });
+        publishIndex();
     }
 
     function sliderNext() {
@@ -145,10 +149,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
         sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
 
-        sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
-        });
+        publishIndex();
     }
 
     function sliderPrevious() {
@@ -157,31 +158,47 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
         sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
 
+        publishIndex();
+    }
+
+
+    function publishChangePosition(data) {
         sandbox.notify({
-            eventId : 'slider-change-position',
-            data : merenje
+            eventId : 'sliderModule::change-position',
+            data : data
         });
     }
+
+    function publishIndex() {
+        sandbox.notify({
+            eventId : 'sliderModule::change-position',
+            data : {
+                index : _localIterator.getIndex()
+            }
+        });
+    }
+
 
     return {
 
         initListeners : function () {
-            sandbox.addListener('broker-request', brokerRequestEvent, this);
+            sandbox.addListener('brokerModule::submit-request', brokerRequestEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('broker-request', brokerRequestEvent);
+            sandbox.removeListener('brokerModule::submit-request', brokerRequestEvent);
         },
         
         start : function () {
-            initSlider();
             this.initListeners();
-            // init event listeners
+            initTemplates(function() {
+                init();
+            });
         },
         
         destroy : function () {
-            destroySlider();
             this.removeListeners();
+            destroy();
         }
     };
 });

@@ -22,14 +22,14 @@ finkipm.core.extensions.iterator = (function () {
     }
 
     return {
-        getIndex : function getIndex() { return _index; },
-        setIndex : function setIndex(index) {
+        getIndex : function() { return _index; },
+        setIndex : function(index) {
             if(typeof index === "number" && index >= 0 && index < _requestedMerenja.length) {
                 _index = index;
             }
         },
-        getMerenja : function getIndex() { return _requestedMerenja; },
-        setMerenja : function setIndex(merenja) { _requestedMerenja = merenja; },
+        getMerenja : function() { return _requestedMerenja; },
+        setMerenja : function(merenja) { _requestedMerenja = merenja; },
 
 
         next : function () {

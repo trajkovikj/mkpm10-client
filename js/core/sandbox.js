@@ -52,6 +52,11 @@ finkipm.sandbox = (function () {
             _templateHandler.getTemplate(templateName, callback);
         },
 
+        getTemplatePromise : function(templateName) {
+
+            return _templateHandler.getTemplatePromise(templateName);
+        },
+
         getIterator : function() {
 
             return _utils.object(_iterator);

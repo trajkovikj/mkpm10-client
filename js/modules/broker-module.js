@@ -8,6 +8,9 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
     var _cityRepository = sandbox.getRepository('cityRepository');
     var _managedModules = {};
 
+    var _localIterator = sandbox.getIterator();
+    var _lastSidebarNotification;
+
     function destroyAllManagedModules() {
 
         for(var key in _managedModules) {
@@ -67,25 +70,67 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
 
     function sidebarSubmitRequestEvent(notification) {
 
+
         positionMap(notification.request.cityId);
         startCorrespondingModule(notification.request.mapType, notification.request.cityId, function () {
 
+            _lastSidebarNotification = notification;
+            _localIterator.resetIteratorData(notification.response);
+
             sandbox.notify({
-                eventId : 'broker-request',
+                eventId : 'brokerModule::submit-request',
                 data : notification
             });
         });
     }
 
 
+    function sliderChangePositionEvent(notification) {
+
+        if(!_lastSidebarNotification) return;
+
+        _localIterator.setIndex(notification.index);
+        var merenje = _localIterator.current();
+        publishMeasurementOnCorrespondingModule(parseInt(_lastSidebarNotification.request.mapType), merenje);
+    }
+
+    function publishMeasurementOnCorrespondingModule(mapType, merenje) {
+
+        switch (mapType) {
+            case enums.mapType.SREDNA_VREDNOST.value :
+                sandbox.notify({
+                    eventId : 'brokerModule::avg-change-measurement',
+                    data : merenje
+                });
+                break;
+
+            case enums.mapType.PO_MERNA_STANICA.value :
+                sandbox.notify({
+                    eventId : 'brokerModule::station-change-measurement',
+                    data : merenje
+                });
+                break;
+
+            case enums.mapType.HEATMAP.value :
+                sandbox.notify({
+                    eventId : 'brokerModule::heatmap-change-measurement',
+                    data : merenje
+                });
+                break;
+        }
+    }
+
+
     return {
 
         initListeners : function () {
-            sandbox.addListener('sidebar-submit-request', sidebarSubmitRequestEvent, this);
+            sandbox.addListener('sidebarModule::submit-request', sidebarSubmitRequestEvent, this);
+            sandbox.addListener('sliderModule::change-position', sliderChangePositionEvent, this);
         },
 
         removeListeners : function () {
-            sandbox.removeListener('sidebar-submit-request', sidebarSubmitRequestEvent);
+            sandbox.removeListener('sidebarModule::submit-request', sidebarSubmitRequestEvent);
+            sandbox.removeListener('sliderModule::change-position', sliderChangePositionEvent);
         },
 
         start : function () {
@@ -96,9 +141,8 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
         destroy : function () {
             this.removeListeners();
             destroy();
-        },
+        }
 
-        d : destroyAllManagedModules
     };
 });
 

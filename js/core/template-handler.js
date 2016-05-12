@@ -6,12 +6,19 @@ finkipm.core.extensions.templateHandler = (function () {
     return {
 
         getTemplate : function (path, callback) {
-             $.ajax({
+            $.ajax({
                 url: './js/templates/' + path + '.handlebars',
                 cache: true,
                 success: function(data) {
                     callback(data);
                 }
+            });
+        },
+
+        getTemplatePromise : function (path) {
+            return $.ajax({
+                url: './js/templates/' + path + '.handlebars',
+                cache: true
             });
         },
 
