@@ -7,6 +7,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var _linq = sandbox.linq;
     var _cityRepository = sandbox.getRepository('cityRepository');
     var _dateRepository = sandbox.getRepository('dateRepository');
+    var _measurementsRepository = sandbox.getRepository('measurementsRepository');
 
     // cache dom elements
     var body = $("body");
@@ -189,6 +190,32 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     }
 
 
+    function getRequestedData(request, callback) {
+
+        switch (request.mapType) {
+
+            case enums.mapType.SREDNA_VREDNOST.value :
+
+                callback(data);
+                break;
+
+            case enums.mapType.PO_MERNA_STANICA.value :
+                sandbox.notify({
+                    eventId : 'brokerModule::station-change-measurement',
+                    data : merenje
+                });
+                break;
+
+            case enums.mapType.HEATMAP.value :
+                sandbox.notify({
+                    eventId : 'brokerModule::heatmap-change-measurement',
+                    data : merenje
+                });
+                break;
+        }
+    }
+
+
     function openSidebarEvent() {
         sidebarSelector.animate({ "left": "+=15%" }, "slow" );
 
@@ -226,7 +253,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     function submitRequestEvent() {
 
         var request = {
-            mapType : mapTypeSelector.find("input[name=map-type]:checked").val(),
+            mapType : parseInt(mapTypeSelector.find("input[name=map-type]:checked").val()),
             cityId : parseInt(citySelector.val()),
             year : yearSelector.val(),
             month : monthSelector.val()
@@ -236,7 +263,23 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         // request.getAllAvg treba da se zameni so nekoe repository ili model
         // koj sto ke go primi requestot i preku ajax ke vrati rezultati od serverot
         // na callback ke ja konstruira notifikacijata i ke ja publish-ne na medijatorot
-        requests.getAllAvg(request.year, request.month).done(function (data) {
+
+        _measurementsRepository.getFiltered(request).then(function(data) {
+
+            var notification = {
+                request : request,
+                response : data
+            };
+
+            debugger;
+
+            sandbox.notify({
+                eventId : 'sidebarModule::submit-request',
+                data : notification
+            });
+        });
+
+        /*requests.getAllAvg(request.year, request.month).done(function (data) {
 
             var notification = {
                 request : request,
@@ -247,7 +290,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
                 eventId : 'sidebarModule::submit-request',
                 data : notification
             });
-        });
+        });*/
     }
 
     return {

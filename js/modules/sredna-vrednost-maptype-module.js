@@ -1,6 +1,6 @@
 "use strict";
 
-finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
+finkipm.core.registerModule('srednaVrednostMapTypeModule', function (sandbox) {
 
     var _toastModule = sandbox.getModule('toastModule');
 
@@ -91,22 +91,15 @@ finkipm.core.registerModule('srednaVrednostModule', function (sandbox) {
         render(initCity, notification);
     }
 
-    /*function sliderChangedPositionEvent(notification) {
-
-        render(initCity, notification);
-    }*/
-
 
     return {
 
         initListeners : function () {
             sandbox.addListener('brokerModule::avg-change-measurement', brokerPublichedNewMeasurementEvent, this);
-            //sandbox.addListener('sliderModule::change-position', sliderChangedPositionEvent, this);
         },
 
         removeListeners : function () {
             sandbox.removeListener('brokerModule::avg-change-measurement', brokerPublichedNewMeasurementEvent);
-            //sandbox.removeListener('sliderModule::change-position', sliderChangedPositionEvent);
         },
 
         start : function (cityId, callback) {

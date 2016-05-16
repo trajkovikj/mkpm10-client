@@ -83,6 +83,54 @@ var googleVariables = {
             }
         };
     })(),
-    heatmap : {}
+    heatmap : (function() {
+
+        var _heatmap;
+
+        return {
+
+            get : function() {
+
+                return _heatmap;
+            },
+
+            create : function() {
+
+                _heatmap = new google.maps.visualization.HeatmapLayer({
+                    map: googleVariables.map,
+                    maxIntensity : 150,
+                    radius : 200
+                });
+            },
+
+            destroy : function() {
+
+                if(!_heatmap) return;
+
+                _heatmap.setMap(null);
+                _heatmap = undefined;
+            },
+
+            setupData : function(data) {
+
+                if(data === null || data === undefined || data.length === 0) return;
+
+                var preparedData = [];
+
+                for(var i=0; i < data.length; i++)
+                {
+                    preparedData.push({
+                        location: new google.maps.LatLng(data.lat, data.lng),
+                        weight : data.weight
+                    })
+                }
+
+                _heatmap.setOptions({
+                    data : preparedData
+                });
+            }
+
+        };
+    })()
 };
 

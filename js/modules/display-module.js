@@ -53,7 +53,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     function avgChangeMeasurementEvent(measurement) {
 
         var context = {
-            date : formatDate(measurement.date),
+            date : formatDate(new Date(measurement.date)),
             pmValue : measurement.pmValue
         };
 

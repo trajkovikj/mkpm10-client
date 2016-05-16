@@ -4,7 +4,10 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
 
     var _toastModule = sandbox.getModule('toastModule');
 
-    var _srednaVrednostModule = sandbox.getModule('srednaVrednostModule');
+    var _srednaVrednostMapTypeModule = sandbox.getModule('srednaVrednostMapTypeModule');
+    var _heatmapMapTypeModule = sandbox.getModule('heatmapMapTypeModule');
+    var _mernaStanicaMapTypeModule = sandbox.getModule('mernaStanicaMapTypeModule');
+
     var _cityRepository = sandbox.getRepository('cityRepository');
     var _managedModules = {};
 
@@ -59,7 +62,9 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
 
 
     function init() {
-        _managedModules[enums.mapType.SREDNA_VREDNOST.value] = _srednaVrednostModule;
+        _managedModules[enums.mapType.SREDNA_VREDNOST.value] = _srednaVrednostMapTypeModule;
+        _managedModules[enums.mapType.HEATMAP.value] = _heatmapMapTypeModule;
+        _managedModules[enums.mapType.PO_MERNA_STANICA.value] = _mernaStanicaMapTypeModule;
     }
 
     function destroy() {
