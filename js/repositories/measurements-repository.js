@@ -2,6 +2,7 @@
 
 finkipm.core.registerRepository('measurementsRepository',(function () {
 
+    var _utils = finkipm.utils;
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
 
@@ -44,6 +45,7 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
                 dataType : 'json'
             });
 
+            //_promiseCache[url] = _utils.object(promise);
             _promiseCache[url] = promise;
 
             return promise.then(function (data) {

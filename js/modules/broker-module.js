@@ -146,6 +146,10 @@ finkipm.core.registerModule('brokerModule', function (sandbox) {
         destroy : function () {
             this.removeListeners();
             destroy();
+        },
+
+        d : function () {
+            destroyAllManagedModules();
         }
 
     };

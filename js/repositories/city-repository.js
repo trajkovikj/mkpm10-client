@@ -2,6 +2,7 @@
 
 finkipm.core.registerRepository('cityRepository',(function () {
 
+    var _utils = finkipm.utils;
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
 
@@ -59,7 +60,7 @@ finkipm.core.registerRepository('cityRepository',(function () {
                 dataType : 'json'
             });
 
-            _promiseCache[url] = promise;
+            _promiseCache[url] = _utils.object(promise);
 
             return promise.then(function (data) {
 
@@ -78,7 +79,7 @@ finkipm.core.registerRepository('cityRepository',(function () {
                 dataType : 'json'
             });
 
-            _promiseCache[url] = promise;
+            _promiseCache[url] = _utils.object(promise);
 
             return promise.then(function (data) {
 
