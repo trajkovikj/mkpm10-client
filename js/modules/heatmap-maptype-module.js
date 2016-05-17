@@ -3,16 +3,9 @@
 finkipm.core.registerModule('heatmapMapTypeModule', function (sandbox) {
 
     var _cityRepository = sandbox.getRepository('cityRepository');
-
-    function colorResolver(number) {
-        if (number <= 50) {
-            return '#00FF00';
-        } else if (number > 50 && number < 200) {
-            return '#FFFF00';
-        } else {
-            return '#FF0000';
-        }
-    }
+    var initCity;
+    var allCities = [];
+    var heatmapData = [];
 
 
     function init(cityId, callback) {
@@ -23,31 +16,92 @@ finkipm.core.registerModule('heatmapMapTypeModule', function (sandbox) {
 
             cityPromise.then(function(city){
 
+                initCity = city;
+                googleVariables.heatmap.create();
+                if(callback) callback();
+            });
+        } else {
+
+            _cityRepository.getAll().then(function(cities) {
+
+                allCities = cities;
                 googleVariables.heatmap.create();
                 if(callback) callback();
             });
         }
-
-        if(callback) callback();
     }
 
     function destroy(callback) {
 
         googleVariables.heatmap.destroy();
+        clearLocalVariables();
+
         if(callback) callback();
     }
 
-    function render(cityId, merenje) {
+    function clearLocalVariables() {
 
+        initCity = undefined;
+        allCities = [];
+        heatmapData = [];
     }
 
-    function renderRectangle(rectangle, pmValue) {
+    function render(city, merenje) {
 
+        clearHeatmap();
+
+        if(city) {
+            renderCity(city, merenje);
+        } else {
+            for(var i=0; i < allCities.length; i++) {
+                renderCity(allCities[i], merenje);
+            }
+        }
+
+        googleVariables.heatmap.setupData(heatmapData);
+    }
+
+    function renderCity(city, merenje) {
+
+        if(!city) return;
+
+        var stanici = city.merniStanici;
+        var values = merenje.values;
+
+        for(var i=0; i < stanici.length; i++) {
+            for(var j=0; j < values.length; j++) {
+                if(values[j].stanicaId === stanici[i].id) {
+                    renderStanica(stanici[i], values[j].pmValue);
+                }
+            }
+        }
+    }
+
+    function renderStanica(stanica, pmValue) {
+
+        var weight = weightResolver(pmValue);
+        heatmapData.push({
+            lat : stanica.lat,
+            lng : stanica.lng,
+            weight : weight
+        });
+    }
+
+    function clearHeatmap() {
+
+        googleVariables.heatmap.clearData();
+        heatmapData = [];
+    }
+
+    function weightResolver(pmValue) {
+
+        return pmValue;
     }
 
 
     function brokerPublichedNewMeasurementEvent(notification) {
 
+          render(initCity, notification);
     }
 
 
@@ -69,10 +123,6 @@ finkipm.core.registerModule('heatmapMapTypeModule', function (sandbox) {
         destroy : function (callback) {
             this.removeListeners();
             destroy(callback);
-        },
-
-        change : function(measurement) {
-            render(initCity, notification);
         }
     };
 });

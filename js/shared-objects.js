@@ -98,9 +98,13 @@ var googleVariables = {
 
                 _heatmap = new google.maps.visualization.HeatmapLayer({
                     map: googleVariables.map,
+                    data : getSkPoints(),
+                    opacity : 0.5,
                     maxIntensity : 150,
                     radius : 200
                 });
+
+                _heatmap.setMap(googleVariables.map);
             },
 
             destroy : function() {
@@ -120,14 +124,21 @@ var googleVariables = {
                 for(var i=0; i < data.length; i++)
                 {
                     preparedData.push({
-                        location: new google.maps.LatLng(data.lat, data.lng),
-                        weight : data.weight
+                        location: new google.maps.LatLng(data[i].lat, data[i].lng),
+                        weight : data[i].weight
                     })
                 }
 
-                _heatmap.setOptions({
-                    data : preparedData
-                });
+                _heatmap.setData(preparedData);
+            },
+
+            clearData : function() {
+
+                /*_heatmap.setOptions({
+                 data : preparedData
+                 });*/
+
+                _heatmap.setData([]);
             }
 
         };

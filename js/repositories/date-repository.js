@@ -30,7 +30,8 @@ finkipm.core.registerRepository('dateRepository',(function () {
                 dataType: 'json'
             });
 
-            _promiseCache[url] = _utils.object(promise);
+            //_promiseCache[url] = _utils.object(promise);
+            _promiseCache[url] = promise;
 
             return promise.then(function (data) {
 

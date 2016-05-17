@@ -1,7 +1,7 @@
 [
   {
     "date":"2016-01-01T00:00:00.000Z",
-    "value" : [
+    "values" : [
       {
         "stanicaId" : 0,
         "pmValue":30
@@ -23,7 +23,7 @@
 
   {
     "date":"2016-01-02T00:00:00.000Z",
-    "value" : [
+    "values" : [
       {
         "stanicaId" : 0,
         "pmValue":110
@@ -45,7 +45,7 @@
 
   {
     "date":"2016-01-03T00:00:00.000Z",
-    "value" : [
+    "values" : [
       {
         "stanicaId" : 0,
         "pmValue":300
@@ -59,7 +59,7 @@
 
   {
     "date":"2016-01-04T00:00:00.000Z",
-    "value" : [
+    "values" : [
       {
         "stanicaId" : 0,
         "pmValue": 400

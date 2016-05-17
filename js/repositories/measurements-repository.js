@@ -35,7 +35,6 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
         getFiltered : function (filter) {
 
-            debugger;
             var url = constructUrlForFilter(filter);
             // var postPayload = constructPayloadForFilter(filter);
 
@@ -51,7 +50,6 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
             return promise.then(function (data) {
 
                 // process, map and return data
-                debugger;
                 return data;
             });
         }

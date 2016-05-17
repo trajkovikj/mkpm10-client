@@ -271,8 +271,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
                 response : data
             };
 
-            debugger;
-
             sandbox.notify({
                 eventId : 'sidebarModule::submit-request',
                 data : notification

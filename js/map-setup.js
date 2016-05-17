@@ -10,7 +10,7 @@ function getSkPoints()
     return [
         { location: new google.maps.LatLng(42.006667, 21.386944), weight : 50 },
         { location: new google.maps.LatLng(41.9925, 21.423611), weight : 100 }
-    ]
+    ];
 }
 
 function toggleRectangle() {
@@ -37,7 +37,7 @@ function changeGradient() {
     'rgba(127, 0, 63, 1)',
     'rgba(191, 0, 31, 1)',
     'rgba(255, 0, 0, 1)'
-  ]
+  ];
   googleVariables.heatmap.set('gradient', googleVariables.heatmap.get('gradient') ? null : gradient);
 }
 

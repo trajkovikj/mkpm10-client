@@ -60,12 +60,6 @@ finkipm.core.registerModule('srednaVrednostMapTypeModule', function (sandbox) {
 
     function render(cityId, merenje) {
 
-        // se raboti za konkreten grad, taka da objektot merenje treba da izgleda vaka:
-        // {date : new Date(05.05.2016), pmValue : 30}
-
-        // merenje za site gradovi
-        // { cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30}, cityId : {date : new Date(05.05.2016), pmValue : 30} }
-
         if(cityId !== null && cityId !== undefined) {
             var rectangle = googleVariables.cityRectangleCache.get(cityId);
             renderRectangle(rectangle, merenje.pmValue);
@@ -110,10 +104,6 @@ finkipm.core.registerModule('srednaVrednostMapTypeModule', function (sandbox) {
         destroy : function (callback) {
             this.removeListeners();
             destroy(callback);
-        },
-
-        change : function(measurement) {
-            render(initCity, notification);
         }
     };
 });
