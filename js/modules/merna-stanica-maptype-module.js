@@ -5,7 +5,6 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
     var _cityRepository = sandbox.getRepository('cityRepository');
     var initCity;
     var allCities = [];
-    var heatmapData = [];
 
 
     function init(cityId, callback) {
@@ -17,7 +16,7 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
             cityPromise.then(function(city){
 
                 initCity = city;
-                googleVariables.heatmap.create();
+                initMarkersForCity(city);
                 if(callback) callback();
             });
         } else {
@@ -25,7 +24,10 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
             _cityRepository.getAll().then(function(cities) {
 
                 allCities = cities;
-                googleVariables.heatmap.create();
+                cities.forEach(function(city) {
+                    initMarkersForCity(city);
+                });
+
                 if(callback) callback();
             });
         }
@@ -33,17 +35,30 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
 
     function destroy(callback) {
 
-        googleVariables.heatmap.destroy();
+        googleVariables.stationMarkerCache.getAll().forEach(function (m) {
+            m.setContent('');
+        });
+
+        googleVariables.stationMarkerCache.clearCache();
+
         clearLocalVariables();
 
         if(callback) callback();
+    }
+
+    function initMarkersForCity(city) {
+
+        if(!city) return;
+
+        city.merniStanici.forEach(function(station) {
+            googleVariables.stationMarkerCache.add(station);
+        });
     }
 
     function clearLocalVariables() {
 
         initCity = undefined;
         allCities = [];
-        heatmapData = [];
     }
 
     function render(city, merenje) {
@@ -57,41 +72,36 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
                 renderCity(allCities[i], merenje);
             }
         }
-
-        googleVariables.heatmap.setupData(heatmapData);
     }
 
     function renderCity(city, merenje) {
 
         if(!city) return;
 
-        var stanici = city.merniStanici;
+        var stations = city.merniStanici;
         var values = merenje.values;
 
-        for(var i=0; i < stanici.length; i++) {
+        for(var i=0; i < stations.length; i++) {
             for(var j=0; j < values.length; j++) {
-                if(values[j].stanicaId === stanici[i].id) {
-                    renderStanica(stanici[i], values[j].pmValue);
+                if(values[j].stanicaId === stations[i].id) {
+                    renderStanica(stations[i], values[j].pmValue);
                 }
             }
         }
     }
 
-    function renderStanica(stanica, pmValue) {
+    function renderStanica(station, pmValue) {
 
-        var weight = weightResolver(pmValue);
-        heatmapData.push({
-            lat : stanica.lat,
-            lng : stanica.lng,
-            weight : weight
-        });
+        var marker = googleVariables.stationMarkerCache.get(station.id);
+        var content = markerContentPreparator(pmValue);
+        marker.setContent(content);
     }
 
     function clearStationmap() {
 
-        // iscisti gi markerite so labelite
-        googleVariables.heatmap.clearData();
-        heatmapData = [];
+        googleVariables.stationMarkerCache.getAll().forEach(function (m) {
+            m.setContent('');
+        });
     }
 
     function colorResolver(pmValue) {
@@ -105,9 +115,10 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
         }
     }
 
-    function weightResolver(pmValue) {
+    function markerContentPreparator(pmValue) {
 
-        return pmValue;
+        var color = colorResolver(pmValue);
+        return '<div class="rich-marker" style="background: ' + color + ';">' + pmValue + '</div>';
     }
 
 

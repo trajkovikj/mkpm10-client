@@ -1,16 +1,5 @@
 "use strict";
 
-/*var selectors = {
-    logo : $("#logo"),
-    sidebar :  $("#sidebar"),
-    pmValueDisplayElement : $("#pm-value"),
-    openCloseSliderButton : $("#open-close"),
-    mapTypeRadio : undefined,
-    citySelector : $("#city"),
-    yearSelector : $("#year"),
-    monthSelector : $("#month")
-};*/
-
 var googleVariables = {
     map : {},
     cityRectangleCache : (function () {
@@ -83,6 +72,7 @@ var googleVariables = {
             }
         };
     })(),
+
     heatmap : (function() {
 
         var _heatmap;
@@ -142,6 +132,73 @@ var googleVariables = {
             }
 
         };
+    })(),
+
+    stationMarkerCache : (function () {
+        var _cache = [];
+
+        return {
+
+            cacheSetup : function (stationMarkerArray) {
+                _cache = stationMarkerArray;
+            },
+
+            get : function (id) {
+                var stationMarker = finkipm.utils.linq.first(_cache, function (sm) {
+                    return sm.stationId === id;
+                });
+
+                if(stationMarker) return stationMarker.marker;
+            },
+
+            getAll : function () {
+                return finkipm.utils.linq.select(_cache, function (sm) {
+                    return sm.marker;
+                });
+            },
+
+            getAllWithStationId : function () {
+                return finkipm.utils.object(_cache);
+            },
+
+            add : function (station) {
+                var stationMarker = {},
+                    marker;
+
+                if(!station) return;
+
+                var cached = this.get(station.id);
+                if(cached) return cached.marker;
+
+                marker = new RichMarker({
+                    map: googleVariables.map,
+                    position: new google.maps.LatLng(station.lat, station.lng),
+                    draggable: false,
+                    flat: false,
+                    anchor: RichMarkerPosition.MIDDLE,
+                    content: ''
+                });
+
+                stationMarker.stationId = station.id;
+                stationMarker.marker = marker;
+
+                _cache.push(stationMarker);
+                return stationMarker.marker;
+
+            },
+
+            remove : function (id) {
+                finkipm.utils.linq.removeFirst(_cache, function (sm) {
+                    return sm.stationId === id;
+                })
+            },
+
+            clearCache : function() {
+                _cache = [];
+            }
+        };
     })()
+
+
 };
 
