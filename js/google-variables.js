@@ -88,7 +88,6 @@ var googleVariables = {
 
                 _heatmap = new google.maps.visualization.HeatmapLayer({
                     map: googleVariables.map,
-                    data : getSkPoints(),
                     opacity : 0.5,
                     maxIntensity : 150,
                     radius : 200
@@ -174,7 +173,7 @@ var googleVariables = {
                     map: googleVariables.map,
                     position: new google.maps.LatLng(station.lat, station.lng),
                     draggable: false,
-                    flat: false,
+                    flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: ''
                 });
