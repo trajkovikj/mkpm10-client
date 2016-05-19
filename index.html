@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Heatmaps</title>
+    <title>FINKI * PM10</title>
 
     <!-- external libs css -->
     <link rel="stylesheet" type="text/css" href="./libs/jquery-ui/jquery-ui.structure.min.css" />
@@ -12,84 +12,11 @@
     <link rel="stylesheet" type="text/css" href="./css/main.css" />
 
 
-    <!--<script id="sidebar-template" type="text/x-handlebars-template">
-      <div id="sidebar">
-
-        <button id="open-close">&lt</button>
-
-        <div id="logo">
-          <span id="title">ФИНКИ</span>
-          <br>
-          <span id="subtitle">еко-информатика</span>
-        </div>
-
-        <div id="radio-map-type">
-          {{#each mapTypes}}
-          <input type="radio" name="map-type" value="{{value}}" {{checked}}> {{description}}<br>
-          {{/each}}
-        </div>
-
-        <select id="city" class="select" name="city">
-          {{#each cities}}
-          <option id="{{id}}" value="{{value}}">{{content}}</option>
-          {{/each}}
-        </select>
-
-        <select id="year" class="select" name="year">
-          {{#each years}}
-          <option id="{{id}}" value="{{value}}">{{content}}</option>
-          {{/each}}
-        </select>
-
-        <select id="month" class="select" name="month">
-          {{#each months}}
-          <option id="{{id}}" value="{{value}}">{{content}}</option>
-          {{/each}}
-        </select>
-
-        <button id="submit">Превземи</button>
-
-        <div id="pm-display">
-          <label id="pm-label">PM10 :</label>
-          <span id="pm-value"></span>
-        </div>
-
-        <div id="date-scroller">
-          <button onclick="prevMerenjeButton()">Prev</button>
-          <button onclick="nextMerenjeButton()">Next</button>
-        </div>
-
-
-      </div>
-    </script>-->
-
-
-    <!--<script id="sidebar-month-template" type="text/x-handlebars-template">
-      {{#each months}}
-        <option id="{{id}}" value="{{value}}">{{content}}</option>
-      {{/each}}
-    </script>-->
-
-
-
   </head>
 
   <body>
 
     <div id="map"></div>
-
-    <!--<div id="floating-panel">
-      <button onclick="toggleRectangle()">Toggle Recktangle</button>
-      <button onclick="toggleMarkers()">Toggle Markers</button>
-      <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-      <button onclick="changeGradient()">Change gradient</button>
-      <button onclick="changeRadius()">Change radius</button>
-      <button onclick="changeOpacity()">Change opacity</button>
-    </div>-->
-
-
-
-
 
 
     <!-- cdn -->
@@ -100,7 +27,6 @@
     <script type="text/javascript" src="./libs/date-format.js"></script>
     <script type="text/javascript" src="./libs/handlebars-v4.0.5.js"></script>
     <script type="text/javascript" src="./libs/jquery-ui/jquery-ui.min.js"></script>
-
 
 
     <!-- core -->
@@ -119,11 +45,6 @@
     <script type="text/javascript" src="./js/repositories/city-repository.js"></script>
     <script type="text/javascript" src="./js/repositories/date-repository.js"></script>
     <script type="text/javascript" src="./js/repositories/measurements-repository.js"></script>
-    <script type="text/javascript" src="./js/requests.js"></script>
-
-
-    <!--  models -->
-    <script type="text/javascript" src="js/models/city-model.js"></script>
 
 
     <!-- modules -->
@@ -137,17 +58,14 @@
 
 
     <!-- startup -->
-    <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/startup.js"></script>
 
 
     <!-- google map cdn, map-init and map-setup functions -->
     <script type="text/javascript" src="./js/init-map.js"></script>
-    <script type="text/javascript" src="./js/map-setup.js"></script>
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC484gyJTuQAL1Pvgfd22MGViXMa_zmW00&libraries=visualization&callback=initMap">
     </script>
-    <!--<script type="application/javascript" src="./libs/marker-with-label.js"></script>-->
 
 
 

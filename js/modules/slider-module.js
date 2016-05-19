@@ -107,7 +107,19 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
             text : false
         });
 
-        intervalId = setInterval(sliderNext, 300);
+        intervalId = setInterval(function() {
+
+            var length = _localIterator.length();
+            var indexOfLast = _localIterator.indexOfLastElement();
+            var indexOfCurrent = _localIterator.getIndex();
+
+            if(length === 0 || indexOfCurrent === indexOfLast) {
+                resetSlider();
+            } else {
+                sliderNext();
+            }
+
+        }, 300);
     }
 
     function sliderButtonPauseEvent() {
@@ -158,6 +170,14 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
 
         sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
 
+        publishIndex();
+    }
+
+    function resetSlider() {
+
+        sliderButtonPauseEvent();
+        _localIterator.setIndex(0);
+        sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
         publishIndex();
     }
 

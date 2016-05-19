@@ -28,6 +28,15 @@ finkipm.core.extensions.iterator = (function () {
                 _index = index;
             }
         },
+
+        indexOfLastElement : function() {
+            return _requestedMerenja.length - 1;
+        },
+
+        length : function() {
+            return _requestedMerenja.length;
+        },
+
         getMerenja : function() { return _requestedMerenja; },
         setMerenja : function(merenja) { _requestedMerenja = merenja; },
 
