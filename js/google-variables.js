@@ -39,11 +39,12 @@ var googleVariables = {
                     if(cached) return cached.rectangle;
 
                     rectangle = new google.maps.Rectangle({
-                        strokeColor: '#FFFFFF',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
+                        //strokeColor: '#FFFFFF',
+                        //strokeOpacity: 0.8,
+                        strokeWeight: 0,
                         //fillColor: '#FF0000',
                         fillOpacity: 0.35,
+                        visible : false,
                         map: googleVariables.map,
                         bounds: {
                             north: city.rectangleBounds.north,

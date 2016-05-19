@@ -77,6 +77,8 @@ finkipm.core.registerModule('srednaVrednostMapTypeModule', function (sandbox) {
         rectangle.setOptions({
             fillColor : colorResolver(pmValue)
         });
+
+        rectangle.setVisible(true);
     }
 
 

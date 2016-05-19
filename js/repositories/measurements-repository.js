@@ -6,6 +6,8 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
 
+    var count = 0;
+
     function mapSend(city) {
         return {
             // mappings here - from app to api
@@ -24,6 +26,23 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
         if(filter.mapType === enums.mapType.SREDNA_VREDNOST.value) {
             url += 'sk-avg.json';
+            //url += 'emptyArray.json';
+        } else {
+            url += 'sk-po-stanica.json';
+        }
+
+        return url;
+    }
+
+
+    function constructUrlForFilter2(filter) {
+
+        var url = apiUrl + 'dummy-data/';
+
+        if(filter.mapType === enums.mapType.SREDNA_VREDNOST.value) {
+            if(count % 2 === 0) url += 'sk-avg.json';
+            else url += 'emptyArray.json';
+            count++;
         } else {
             url += 'sk-po-stanica.json';
         }
@@ -35,7 +54,7 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
         getFiltered : function (filter) {
 
-            var url = constructUrlForFilter(filter);
+            var url = constructUrlForFilter2(filter);
             // var postPayload = constructPayloadForFilter(filter);
 
             var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({

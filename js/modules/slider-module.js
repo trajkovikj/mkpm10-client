@@ -136,24 +136,7 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         clearInterval(intervalId);
     }
     
-    function brokerRequestEvent(notification) {
 
-        // se cuva poslednata notiikacija, bidejki ke bide potrebno pri change event na slider-ot
-        // da se znae na koj kanal da se emituva podatokot
-        // ova e se poradi razlicniot format na merenja pri razlicen mapType
-        _lastNotification = notification;
-        _localIterator.resetIteratorData(notification.response);
-
-        sliderScrollerSelector.slider("option", "max", notification.response.length - 1);
-        sliderScrollerSelector.slider("option", "min", 0);
-        sliderScrollerSelector.slider("option", "value", 0);
-
-        var merenje = _localIterator.current();
-
-        if(!merenje) return;
-
-        publishIndex();
-    }
 
     function sliderNext() {
         var merenje = _localIterator.next();
@@ -178,6 +161,25 @@ finkipm.core.registerModule('sliderModule', function (sandbox) {
         sliderButtonPauseEvent();
         _localIterator.setIndex(0);
         sliderScrollerSelector.slider("option", "value", _localIterator.getIndex());
+        publishIndex();
+    }
+
+    function brokerRequestEvent(notification) {
+
+        // se cuva poslednata notiikacija, bidejki ke bide potrebno pri change event na slider-ot
+        // da se znae na koj kanal da se emituva podatokot
+        // ova e se poradi razlicniot format na merenja pri razlicen mapType
+        _lastNotification = notification;
+        _localIterator.resetIteratorData(notification.response);
+
+        sliderScrollerSelector.slider("option", "max", notification.response.length - 1); // notification.response.length > 0 ? notification.response.length - 1 : 0
+        sliderScrollerSelector.slider("option", "min", 0);
+        sliderScrollerSelector.slider("option", "value", 0);
+
+        var merenje = _localIterator.current();
+
+        if(!merenje) return;
+
         publishIndex();
     }
 
