@@ -4,6 +4,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
     var _toastModule = sandbox.getModule('toastModule');
 
+    var _utils = sandbox.utils;
     var _linq = sandbox.linq;
     var _cityRepository = sandbox.getRepository('cityRepository');
     var _dateRepository = sandbox.getRepository('dateRepository');
@@ -15,6 +16,8 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var template;
     var templateMonthSelectorSource;
     var monthTemplate;
+    var templateTimeUnitSelectorSource;
+    var timeUnitTemplate;
 
 
     /*sandbox.getTemplate('sidebar-template', function(data){
@@ -29,7 +32,8 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
 
     var sidebarSelector;
-    var openCloseSliderButton;
+    var openSidebarButton;
+    var closeSidebarButton;
     var mapTypeSelector;
     var citySelector;
     var yearSelector;
@@ -37,10 +41,20 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var submitButton;
 
     var allYearsWithMonths;
+    var defaultYear = {
+        id : 0,
+        value : 0,
+        content : 'Сите години'
+    };
+    var defaultMonth = {
+        id : 0,
+        value : 0,
+        content : 'Сите месеци'
+    };
 
 
     function formatMonthsArray(months) {
-        months.unshift('Сите месеци');
+        months.unshift(defaultMonth.content);
         return months;
     }
 
@@ -93,18 +107,42 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         return result;
     }
 
+    function getTimeUnits(){
+
+        var timeUnitList = [];
+
+        for(var key in enums.timeUnit){
+            if (enums.timeUnit.hasOwnProperty(key)) {
+                timeUnitList.push({
+                    value : enums.timeUnit[key].value,
+                    description : enums.timeUnit[key].description,
+                    checked : ''
+                });
+            }
+        }
+
+        timeUnitList[0].checked = 'checked';
+        return timeUnitList;
+    }
 
     function initTemplates(callback) {
 
         sandbox.getTemplatePromise('sidebar-template').then(function(data) {
+
             templateSource = data;
             template = Handlebars.compile(templateSource);
-
             return sandbox.getTemplatePromise('sidebar-month-template');
+
         }).then(function(data) {
+
             templateMonthSelectorSource = data;
             monthTemplate = Handlebars.compile(templateSource);
+            return sandbox.getTemplatePromise('sidebar-time-unit-template');
 
+        }).then(function(data) {
+
+            templateTimeUnitSelectorSource = data;
+            timeUnitTemplate = Handlebars.compile(templateTimeUnitSelectorSource);
             callback();
         });
     }
@@ -142,19 +180,27 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             body.prepend(html);
 
             sidebarSelector = $("#sidebar");
-            openCloseSliderButton = sidebarSelector.find("#open-close");
+            openSidebarButton = $("#open-sidebar");
+            closeSidebarButton = sidebarSelector.find("#close-sidebar");
             mapTypeSelector = sidebarSelector.find("#radio-map-type");
             citySelector = sidebarSelector.find("#city");
             yearSelector = sidebarSelector.find("#year");
             monthSelector = sidebarSelector.find("#month");
             submitButton = sidebarSelector.find("#submit");
 
-            openCloseSliderButton.button({
+            /*openSidebarButton.button({
+                icons : {
+                    primary : 'ui-icon-triangle-1-e'
+                },
+                text : false
+            });
+
+            closeSidebarButton.button({
                 icons : {
                     primary : 'ui-icon-triangle-1-w'
                 },
                 text : false
-            });
+            });*/
 
             callback();
         });
@@ -184,11 +230,13 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             months : getMonths(allYearsWithMonths[selectedYearId].months)
         };
 
+        var timeUnitSelector = $("#sidebar").find("#radio-time-unit");
+        if(_utils.jqSelectorExist(timeUnitSelector)) timeUnitSelector.remove();
+
         var html = monthTemplate(context);
         monthSelector.html('');
         monthSelector.html(html);
     }
-
 
     function getRequestedData(request, callback) {
 
@@ -216,32 +264,13 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     }
 
 
+
     function openSidebarEvent() {
-        sidebarSelector.animate({ "left": "+=15%" }, "slow" );
-
-        openCloseSliderButton.button({
-            icons : {
-                primary : 'ui-icon-triangle-1-w'
-            },
-            text : false
-        });
-
-        openCloseSliderButton.off("click");
-        openCloseSliderButton.on("click", closeSidebarEvent);
+        sidebarSelector.animate({ "left": "+=20%" }, "slow" );
     }
 
     function closeSidebarEvent() {
-        sidebarSelector.animate({ "left": "-=15%" }, "slow" );
-
-        openCloseSliderButton.button({
-            icons : {
-                primary : 'ui-icon-triangle-1-e'
-            },
-            text : false
-        });
-
-        openCloseSliderButton.off("click");
-        openCloseSliderButton.on("click", openSidebarEvent);
+        sidebarSelector.animate({ "left": "-=20%" }, "slow" );
     }
 
     function yearChangeEvent() {
@@ -249,20 +278,42 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         renderMonthSelector(selectedYearId);
     }
 
+    function monthChangeEvent() {
+        var selectedYear = parseInt(yearSelector.find(" :selected").val());
+        var selectedMonth = parseInt(monthSelector.find(" :selected").val());
+
+        var timeUnitSelector = $("#sidebar").find("#radio-time-unit");
+
+        if(selectedYear !== defaultYear.value && selectedMonth !== defaultMonth.value) {
+
+            if(!_utils.jqSelectorExist(timeUnitSelector)) {
+
+                var context = {
+                    timeUnits : getTimeUnits()
+                };
+
+                var html = timeUnitTemplate(context);
+                monthSelector.after(html);
+            }
+        } else {
+
+            if(_utils.jqSelectorExist(timeUnitSelector)) timeUnitSelector.remove();
+        }
+
+    }
+
 
     function submitRequestEvent() {
+
+        var timeUnitSelector = $("#sidebar").find("#radio-time-unit");
 
         var request = {
             mapType : parseInt(mapTypeSelector.find("input[name=map-type]:checked").val()),
             cityId : parseInt(citySelector.val()),
-            year : yearSelector.val(),
-            month : monthSelector.val()
+            year : parseInt(yearSelector.val()),
+            month : parseInt(monthSelector.val()),
+            timeUnit : _utils.jqSelectorExist(timeUnitSelector) ? parseInt(timeUnitSelector.find("input[name=time-unit]:checked").val()) : undefined
         };
-
-        // ova e test
-        // request.getAllAvg treba da se zameni so nekoe repository ili model
-        // koj sto ke go primi requestot i preku ajax ke vrati rezultati od serverot
-        // na callback ke ja konstruira notifikacijata i ke ja publish-ne na medijatorot
 
         _measurementsRepository.getFiltered(request).then(function(data) {
 
@@ -277,18 +328,6 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             });
         });
 
-        /*requests.getAllAvg(request.year, request.month).done(function (data) {
-
-            var notification = {
-                request : request,
-                response : data
-            };
-
-            sandbox.notify({
-                eventId : 'sidebarModule::submit-request',
-                data : notification
-            });
-        });*/
     }
 
     return {
@@ -301,8 +340,10 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
                 init(function () {
 
-                    openCloseSliderButton.on("click", closeSidebarEvent);
+                    openSidebarButton.on("click", openSidebarEvent);
+                    closeSidebarButton.on("click", closeSidebarEvent);
                     yearSelector.on('change', yearChangeEvent);
+                    monthSelector.on('change', monthChangeEvent);
                     submitButton.on('click', submitRequestEvent);
                 });
             });
@@ -312,8 +353,10 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
             destroy(function () {
 
-                openCloseSliderButton.off("click");
+                openSidebarButton.off("click");
+                closeSidebarButton.off("click");
                 yearSelector.off('change');
+                monthSelector.off('change');
                 submitButton.off('click');
             });
         }

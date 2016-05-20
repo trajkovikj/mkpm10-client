@@ -15,6 +15,17 @@ var enums = {
             value : 2,
             description : 'Приказ преку жаришта'
         }
+    },
+
+    timeUnit : {
+        DAY : {
+            value : 0,
+            description : 'ден'
+        },
+        HOUR : {
+            value : 1,
+            description : 'час'
+        }
     }
 
 };

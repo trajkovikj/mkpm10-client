@@ -34,6 +34,10 @@ finkipm.utils = {
         childCtor.prototype.constructor = childCtor;
     },
 
+    jqSelectorExist : function(selector) {
+        return selector.length ? true : false;
+    },
+
     linq : {
 
         select : function (array, func) {

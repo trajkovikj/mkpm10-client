@@ -1,6 +1,6 @@
 <div id="sidebar">
 
-    <button id="open-close"></button>
+    <div id="close-sidebar">x</div>
 
     <div id="logo">
         <span id="title">ФИНКИ</span>
@@ -8,7 +8,7 @@
         <span id="subtitle">еко-информатика</span>
     </div>
 
-    <div id="radio-map-type">
+    <div id="radio-map-type" class="radio-group">
         {{#each mapTypes}}
             <input type="radio" name="map-type" value="{{value}}" {{checked}}> {{description}}<br>
         {{/each}}
