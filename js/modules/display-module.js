@@ -2,17 +2,19 @@
 
 finkipm.core.registerModule('displayModule', function (sandbox) {
 
+    var _linq = sandbox.linq;
     // cache dom elements
     var bodySelector = $("body");
     var displaySelector;
+    var contentSelector;
+    var showHideButtonSelector;
 
     var templateSource;
     var template;
-
-    /*sandbox.getTemplate('display-template', function(data){
-        templateSource = data;
-        template = Handlebars.compile(templateSource);
-    });*/
+    var singleValueTemplateSource;
+    var singleValueTemplate;
+    var valueByStationTemplateSource;
+    var valueByStationTemplate;
 
     function initTemplates(callback){
 
@@ -20,34 +22,59 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
 
             templateSource = data;
             template = Handlebars.compile(templateSource);
+            return sandbox.getTemplatePromise('display-single-value-template');
+
+        }).then(function (data) {
+
+            singleValueTemplateSource = data;
+            singleValueTemplate = Handlebars.compile(singleValueTemplateSource);
+            return sandbox.getTemplatePromise('display-value-by-station-template');
+
+        }).then(function (data) {
+
+            valueByStationTemplateSource = data;
+            valueByStationTemplate = Handlebars.compile(valueByStationTemplateSource);
             callback();
         });
     }
 
     function init() {
 
-        var context = {
-            date : '',
-            pmValue : ''
-        };
+        var html = template();
 
-        var html = template(context);
-
-        bodySelector.append('<div id="display"></div>');
+        bodySelector.append(html);
         displaySelector = $("#display");
-        displaySelector.html(html);
+        showHideButtonSelector = displaySelector.find("#show-hide");
+        contentSelector = displaySelector.find("#content");
+
+        contentSelector.hide();
+
+        showHideButtonSelector.on('click', showContent);
     }
 
     function destroy() {
 
         displaySelector.remove();
         displaySelector = undefined;
+        showHideButtonSelector.off('click');
     }
 
-    function render(context) {
+    /*function render(context) {
 
         var html = template(context);
         displaySelector.html(html);
+    }*/
+
+    function renderSingle(context) {
+
+        var html = singleValueTemplate(context);
+        contentSelector.html(html);
+    }
+
+    function renderByStation(context) {
+
+        var html = valueByStationTemplate(context);
+        contentSelector.html(html);
     }
 
     function avgChangeMeasurementEvent(measurement) {
@@ -57,15 +84,56 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
             pmValue : measurement.pmValue
         };
 
-        render(context);
+        renderSingle(context);
     }
 
-    function stationChangeMeasurementEvent(notification) {
+    function stationChangeMeasurementEvent(measurement) {
 
+        var context = {
+            date : formatDate(new Date(measurement.date)),
+            stationValueList : _linq.select(measurement.values, function (x) {
+                return {
+                    stationName : x.stanicaId,
+                    pmValue : x.pmValue
+                };
+            })
+        };
+
+        renderByStation(context);
     }
 
-    function heatmapChangeMeasurementEvent(notification) {
+    function heatmapChangeMeasurementEvent(measurement) {
 
+        var context = {
+            date : formatDate(new Date(measurement.date)),
+            stationValueList : _linq.select(measurement.values, function (x) {
+                return {
+                    stationName : x.stanicaId,
+                    pmValue : x.pmValue
+                };
+            })
+        };
+
+        renderByStation(context);
+    }
+
+
+    function showContent() {
+
+        showHideButtonSelector.html("затвори");
+        contentSelector.slideDown();
+
+        showHideButtonSelector.off('click');
+        showHideButtonSelector.on('click', hideContent);
+    }
+
+    function hideContent() {
+
+        showHideButtonSelector.html("прикажи");
+        contentSelector.slideUp();
+
+        showHideButtonSelector.off('click');
+        showHideButtonSelector.on('click', showContent);
     }
 
     function formatDate(date) {

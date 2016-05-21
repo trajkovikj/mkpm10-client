@@ -26,7 +26,6 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
         if(filter.mapType === enums.mapType.SREDNA_VREDNOST.value) {
             url += 'sk-avg.json';
-            //url += 'emptyArray.json';
         } else {
             url += 'sk-po-stanica.json';
         }
@@ -54,7 +53,7 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
         getFiltered : function (filter) {
 
-            var url = constructUrlForFilter2(filter);
+            var url = constructUrlForFilter(filter);
             // var postPayload = constructPayloadForFilter(filter);
 
             var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({

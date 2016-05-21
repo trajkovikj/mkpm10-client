@@ -1,0 +1,33 @@
+#slider {
+    position: absolute;
+    bottom: 5%;
+    left: 23%;
+    /*right: 10%;*/
+    height: 3%;
+    width: 60%;
+    z-index: 5;
+    /*background-color: red;
+    border: 2px solid black;*/
+}
+
+#slider #sliderButton {
+    float : left;
+    height: 100%;
+    width: 5%;
+}
+
+#slider .seekButton {
+    float : left;
+    height: 100%;
+    width: 3%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+
+#slider #sliderScroller {
+    float : left;
+    margin-left: 2%;
+    margin-top: 0.4%;
+    height: 60%;
+    width: 83%;
+}

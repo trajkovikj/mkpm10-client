@@ -1,0 +1,65 @@
+#display {
+    position: absolute;
+    height: auto;
+    width: auto;
+    min-width: 20%;
+    top: 1%;
+    right: 3%;
+    z-index: 5;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px #424242;
+    padding: 0.5%;
+    border: 1px solid #999;
+    text-align: left;
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+}
+
+#display #header {
+    width: 100%;
+}
+
+#display #header #label {
+    float: left;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #666;
+}
+
+#display #header #show-hide {
+    float: right;
+    text-align: left;
+    color: cornflowerblue;
+    cursor: pointer;
+}
+
+#display #header:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+
+#display #content {
+
+}
+
+#display #content hr {
+    border: 0;
+    height: 1px;
+    background: #999;
+}
+
+#display #content #date {
+    text-align: left;
+    color: #666;
+}
+
+#display #content #item span {
+    color: #333;
+}
+
+#display #content #pmvalue {
+    color: #333;
+}
