@@ -18,31 +18,15 @@ function initMap() {
     });
 
 
-    finkipm.utils.loadScript('./libs/rich-marker.js', function() {
-
-        /*var homeLatLng = new google.maps.LatLng(41.9925, 21.423611);
-
-        var marker1 = new MarkerWithLabel({
-            position: homeLatLng,
-            draggable: true,
-            raiseOnDrag: true,
-            map: googleVariables.map,
-            labelContent: "125",
-            labelAnchor: new google.maps.Point(22, 0),
-            labelClass: "labels", // the CSS class for the label
-            labelStyle: {opacity: 0.75}
-        });
-
-        var iw1 = new google.maps.InfoWindow({
-            content: "Home For Sale"
-        });
-        google.maps.event.addListener(marker1, "click", function (e) { iw1.open(googleVariables.map, this); });*/
-
+    requirejs(['./libs/rich-marker.js'], function() {
 
         startup.execute();
     });
 
+    /*finkipm.utils.loadScript('./libs/rich-marker.js', function() {
 
+        startup.execute();
+    });*/
 
 
 
