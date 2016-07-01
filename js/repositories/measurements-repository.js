@@ -6,19 +6,22 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
 
+    // remove me
+    apiUrl = './';
+
     var count = 0;
 
-    function mapSend(city) {
-        return {
-            // mappings here - from app to api
-        };
-    }
 
-    function mapReceive(city) {
-        return {
-            // mappings here - from api to app (use model properties)
-        };
-    }
+    return {
+        getFiltered: getFiltered,
+
+        mapSend: mapSend,
+        mapReceive: mapReceive
+    };
+
+
+
+    /// implementation /////////
 
     function constructUrlForFilter(filter) {
 
@@ -33,95 +36,43 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
         return url;
     }
 
+    function getFiltered(filter) {
 
-    function constructUrlForFilter2(filter) {
+        var url = constructUrlForFilter(filter);
+        // var postPayload = constructPayloadForFilter(filter);
 
-        var url = apiUrl + 'dummy-data/';
+        var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
+            type : 'GET',
+            url : url,
+            dataType : 'json'
+        });
 
-        if(filter.mapType === enums.mapType.SREDNA_VREDNOST.value) {
-            if(count % 2 === 0) url += 'sk-avg.json';
-            else url += 'emptyArray.json';
-            count++;
-        } else {
-            url += 'sk-po-stanica.json';
-        }
+        //_promiseCache[url] = _utils.object(promise);
+        _promiseCache[url] = promise;
 
-        return url;
+        return promise.then(function (data) {
+
+            // process, map and return data
+            return data;
+        });
     }
 
-    return {
 
-        getFiltered : function (filter) {
 
-            var url = constructUrlForFilter(filter);
-            // var postPayload = constructPayloadForFilter(filter);
+    /// mappers /////////
 
-            var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
-                type : 'GET',
-                url : url,
-                dataType : 'json'
-            });
+    function mapSend(city) {
+        return {
+            // mappings here - from app to api
+        };
+    }
 
-            //_promiseCache[url] = _utils.object(promise);
-            _promiseCache[url] = promise;
+    function mapReceive(city) {
+        return {
+            // mappings here - from api to app (use model properties)
+        };
+    }
 
-            return promise.then(function (data) {
-
-                // process, map and return data
-                return data;
-            });
-        }
-
-        /*getAll : function () {
-
-            var url = apiUrl + 'dummy-data/cities.json';
-
-            var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
-                type : 'GET',
-                url : url,
-                dataType : 'json'
-            });
-
-            _promiseCache[url] = promise;
-
-            return promise.then(function (data) {
-
-                // process, map and return data
-                return data;
-            });
-        },
-
-        get : function (id) {
-
-            var url = apiUrl + 'dummy-data/cities-id.json';
-
-            var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
-                type : 'GET',
-                url : url,
-                dataType : 'json'
-            });
-
-            _promiseCache[url] = promise;
-
-            return promise.then(function (data) {
-
-                // process, map and return data
-                return data;
-            });
-        },
-
-        create : function (city) {
-
-        },
-
-        update : function (city) {
-
-        },
-
-        delete : function (id) {
-
-        }*/
-    };
 })());
 
 

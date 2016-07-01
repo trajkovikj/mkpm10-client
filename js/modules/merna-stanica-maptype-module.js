@@ -11,9 +11,7 @@ finkipm.core.registerModule('mernaStanicaMapTypeModule', function (sandbox) {
 
         if(cityId !== null && cityId !== undefined) {
 
-            var cityPromise = _cityRepository.get(cityId);
-
-            cityPromise.then(function(city){
+            _cityRepository.get(cityId).then(function(city){
 
                 initCity = city;
                 initMarkersForCity(city);

@@ -3,6 +3,6 @@
 finkipm.core.config = (function () {
 
     return {
-        apiUrl : './'
+        apiUrl : 'http://localhost/mkpm10-webapi-laravel/public/api/'
     };
 })();

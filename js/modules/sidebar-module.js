@@ -309,7 +309,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
         var request = {
             mapType : parseInt(mapTypeSelector.find("input[name=map-type]:checked").val()),
-            cityId : parseInt(citySelector.val()),
+            cityId : citySelector.val(),
             year : parseInt(yearSelector.val()),
             month : parseInt(monthSelector.val()),
             timeUnit : _utils.jqSelectorExist(timeUnitSelector) ? parseInt(timeUnitSelector.find("input[name=time-unit]:checked").val()) : undefined

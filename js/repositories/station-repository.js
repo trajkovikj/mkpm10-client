@@ -1,11 +1,17 @@
-"use strict";
+/**
+ * Created by srbo on 01-Jul-16.
+ */
 
-finkipm.core.registerRepository('cityRepository',(function () {
+
+
+finkipm.core.registerRepository('stationRepository',(function () {
+
+    "use strict";
 
     var _utils = finkipm.utils;
     var apiUrl = finkipm.core.config.apiUrl;
-    var stationRepository = finkipm.core.getRepository('stationRepository');
     var _promiseCache = {};
+
 
     return {
         getAll: getAll,
@@ -23,8 +29,7 @@ finkipm.core.registerRepository('cityRepository',(function () {
 
      function getAll() {
 
-        //var url = apiUrl + 'dummy-data/cities.json';
-        var url = apiUrl + 'v1/cities';
+        var url = apiUrl + 'v1/stations';
 
         var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
             type : 'GET',
@@ -37,19 +42,17 @@ finkipm.core.registerRepository('cityRepository',(function () {
 
         return promise.then(function (response) {
             // process, map and return data
-            var cities = response.data.cities;
+            var stations = response.data.stations;
 
-            return _utils.linq.select(cities, function (city) {
-                return mapReceive(city);
+            return _utils.linq.select(stations, function (station) {
+                return mapReceive(station);
             });
-
         });
-    }
+     }
 
-    function get(id) {
+     function get(id) {
 
-        //var url = apiUrl + 'dummy-data/cities-id.json';
-        var url = apiUrl + 'v1/cities/' + id;
+        var url = apiUrl + 'v1/stations/' + id;
 
         var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
             type : 'GET',
@@ -64,52 +67,39 @@ finkipm.core.registerRepository('cityRepository',(function () {
 
             return mapReceive(response.data);
         });
-    }
+     }
 
-    function create(city) {
+     function create(station) {
 
-    }
+     }
 
-    function update(city) {
+     function update(station) {
 
-    }
+     }
 
-    function remove(id) {
+     function remove(id) {
 
-    }
+     }
 
 
 
     /// mappers /////////
 
-    function mapSend(city) {
+    function mapSend(station) {
         // mappings here - from app to api
         return {
-            
+
         };
     }
 
-    function mapReceive(city) {
+    function mapReceive(station) {
         // mappings here - from api to app (use model properties)
-
-        var stations = city.cityStations ? _utils.linq.select(city.cityStations, function (station) {
-            station.cityId = city.id;
-            return stationRepository.mapReceive(station)
-        }) : [];
-
         return {
-            id: city.id,
-            name: city.name,
-            lat: parseFloat(city.lat),
-            lng: parseFloat(city.lng),
-            merniStanici: stations,
-            zoomLevel: parseInt(city.zoomLevel),
-            rectangleBounds: {
-                north: parseFloat(city.north),
-                south: parseFloat(city.south),
-                east: parseFloat(city.east),
-                west: parseFloat(city.west)
-            }
+            id : station.id,
+            cityId: station.cityId,
+            description : station.description,
+            lat: parseFloat(station.lat),
+            lng: parseFloat(station.lng)
         };
     }
 
