@@ -312,7 +312,9 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
             cityId : citySelector.val(),
             year : parseInt(yearSelector.val()),
             month : parseInt(monthSelector.val()),
-            timeUnit : _utils.jqSelectorExist(timeUnitSelector) ? parseInt(timeUnitSelector.find("input[name=time-unit]:checked").val()) : undefined
+            timeUnit : _utils.jqSelectorExist(timeUnitSelector)
+                ? parseInt(timeUnitSelector.find("input[name=time-unit]:checked").val())
+                : enums.timeUnit.DAY.value
         };
 
         _measurementsRepository.getFiltered(request).then(function(data) {
