@@ -30,25 +30,28 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
         var data = {
             cityId: context.cityId,
             startDate: constructStartDate(context),
-            endDate: constructEndDate(context)
+            endDate: constructEndDate(context),
+            timeUnit: context.timeUnit
         };
 
-        var promise = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
+        var deferred = $.Deferred();
+
+        var ajaxRequest = _promiseCache.hasOwnProperty(url) ? _promiseCache[url] : $.ajax({
             type : 'POST',
             url : url,
             data: data,
-            dataType : 'json'
+            dataType : 'json',
+            success: deferred.resolve,
+            error: deferred.reject
         });
 
         //_promiseCache[url] = promise;
 
-        return promise.then(function (response) {
+        var promise = deferred.promise();
+
+        return promise.pipe(function (response) {
             // process, map and return data
-            console.log('in success');
-            return _utils.linq.select(response.data, mapReceiveByStation);
-        }, function (error) {
-            console.log('in error');
-            console.log(error);
+            return mapResponse(response, context);
         });
     }
 
@@ -62,7 +65,7 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
 
     function constructEndDate(context) {
         var year = context.year;
-        var month = context.month === 0 || context.month === 11  ? '12' : '0' + context.month + 1;
+        var month = context.month === 0 || context.month === 11  ? '12' : '0' + (parseInt(context.month) + 1);
         var day = context.month === 0 ? '31' : '01';
 
         return  year + '-' + month + '-' + day;
@@ -91,13 +94,27 @@ finkipm.core.registerRepository('measurementsRepository',(function () {
         };
     }
 
+    function mapResponse(response, context) {
+
+        return context.mapType === enums.mapType.SREDNA_VREDNOST.value
+            ? _utils.linq.select(response.data, mapReceiveByCity)
+            : _utils.linq.select(response.data, mapReceiveByStation);
+    }
+
+    function mapReceiveByCity(measurement) {
+        return {
+            date: measurement.date,
+            pmValue:  Math.round(measurement.pmValue * 100) / 100
+        }
+    }
+
     function mapReceiveByStation(measurement) {
         return {
             date: measurement.date,
             values: _utils.linq.select(measurement.values, function (value) {
                 return {
                     stanicaId: value.stationId,
-                    pmValue: value.pmValue
+                    pmValue:  Math.round(value.pmValue * 100) / 100
                 };
             })
         }

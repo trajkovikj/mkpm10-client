@@ -137,7 +137,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     }
 
     function formatDate(date) {
-        return date.format("dd.mm.yyyy");
+        return date.format("dd.mm.yyyy HH:mm");
     }
 
     return {

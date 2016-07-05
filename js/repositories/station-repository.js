@@ -11,6 +11,7 @@ finkipm.core.registerRepository('stationRepository',(function () {
     var _utils = finkipm.utils;
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
+    var _stationCache = {};
 
 
     return {
