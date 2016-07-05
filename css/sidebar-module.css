@@ -6,7 +6,7 @@
     height: 100%;
     z-index: 6;
     background-color: #ffffff; /*#9E9E9E*/
-    opacity: 0.8;
+    opacity: 1.0;
     box-shadow: 5px 0px 20px #424242;
     text-align: center;
     font-family: 'Roboto','sans-serif';
@@ -51,7 +51,7 @@
 #sidebar #logo #title {
     font-size: 2em;
     font-weight: 600;
-    color: #333;
+    color: royalblue; /*#333;*/
     /*color: #4169E1;*/
 }
 
@@ -82,7 +82,8 @@
     width: 90%;
     font-size: 1.1em;
     font-weight: 600;
-    color: #333;
+    color: white; /*#333;*/
+    background-color: royalblue;
 }
 
 

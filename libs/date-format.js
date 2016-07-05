@@ -108,7 +108,7 @@ dateFormat.masks = {
 };
 
 // Internationalization strings
-dateFormat.i18n = {
+/*dateFormat.i18n = {
     dayNames: [
         "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
         "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
@@ -116,6 +116,17 @@ dateFormat.i18n = {
     monthNames: [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ]
+};*/
+
+dateFormat.i18n = {
+    dayNames: [
+        "Нед", "Пон", "Вто", "Сре", "Чет", "Пет", "Саб",
+        "Недела", "Понеделник", "Вторник", "Среда", "Четврток", "Петок", "Сабота"
+    ],
+    monthNames: [
+        "Јан", "Фев", "Мар", "Апр", "Мај", "Јун", "Јул", "Авг", "Сеп", "Окт", "Ное", "Дек",
+        "Јануари", "Февруари", "Март", "Април", "Мај", "Јуни", "Јули", "Август", "Септември", "Октомври", "Ноември", "Декември"
     ]
 };
 
