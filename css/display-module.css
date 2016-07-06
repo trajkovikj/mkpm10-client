@@ -24,13 +24,13 @@
     text-align: left;
     font-size: 1.1em;
     font-weight: 700;
-    color: #666;
+    color: #333;
 }
 
 #display #header #show-hide {
     float: right;
     text-align: left;
-    color: cornflowerblue;
+    color: royalblue;
     cursor: pointer;
 }
 
@@ -53,7 +53,8 @@
 
 #display #content #date {
     text-align: left;
-    color: #666;
+    color: #333;
+    padding-left: 3%;
 }
 
 #display #content #item span {
@@ -62,4 +63,23 @@
 
 #display #content #pmvalue {
     color: #333;
+    padding-left: 3%;
+}
+
+#display table {
+    border: 0px solid #333;
+    width: 100%;
+}
+
+#display table th{
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-left: 3%;
+}
+
+
+#display table td{
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-left: 3%;
 }

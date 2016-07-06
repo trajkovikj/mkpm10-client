@@ -3,6 +3,8 @@
 finkipm.core.registerModule('displayModule', function (sandbox) {
 
     var _linq = sandbox.linq;
+    var _cache = finkipm.core.extensions.cache;
+
     // cache dom elements
     var bodySelector = $("body");
     var displaySelector;
@@ -16,7 +18,7 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
     var valueByStationTemplateSource;
     var valueByStationTemplate;
 
-    function initTemplates(callback){
+    function initTemplates(callback) {
 
         sandbox.getTemplatePromise('display-template').then(function(data) {
 
@@ -93,7 +95,9 @@ finkipm.core.registerModule('displayModule', function (sandbox) {
             date : formatDate(new Date(measurement.date)),
             stationValueList : _linq.select(measurement.values, function (x) {
                 return {
-                    stationName : x.stanicaId,
+                    stationName : _linq.first(_cache.get('stations'), function (station) {
+                        return station.id === x.stanicaId
+                    }).description,
                     pmValue : x.pmValue
                 };
             })

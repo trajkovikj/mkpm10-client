@@ -1,8 +1,20 @@
 <hr>
 <div id="date"><strong>Датум:</strong> {{date}}</div>
-{{#each stationValueList}}
-    <div id="item">
-        <span>{{stationName}}</span>
-        <span>PM10: {{pmValue}}</span>
-    </div>
-{{/each}}
+<table>
+    <tr>
+        <th>Станица</th>
+        <th>PM10</th>
+    </tr>
+    {{#each stationValueList}}
+        <tr>
+            <td>{{stationName}}</td>
+            <td>{{pmValue}}</td>
+        </tr>
+    {{/each}}
+</table>
+
+<!-- <div id="item">
+            <span></span>
+            <span>PM10: </span>
+        </div>-->
+

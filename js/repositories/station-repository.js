@@ -9,6 +9,7 @@ finkipm.core.registerRepository('stationRepository',(function () {
     "use strict";
 
     var _utils = finkipm.utils;
+    var _cache = finkipm.core.extensions.cache;
     var apiUrl = finkipm.core.config.apiUrl;
     var _promiseCache = {};
     var _stationCache = {};
@@ -38,16 +39,18 @@ finkipm.core.registerRepository('stationRepository',(function () {
             dataType : 'json'
         });
 
-        //_promiseCache[url] = _utils.object(promise);
         _promiseCache[url] = promise;
 
         return promise.then(function (response) {
             // process, map and return data
             var stations = response.data.stations;
 
-            return _utils.linq.select(stations, function (station) {
+            var mappedStations =  _utils.linq.select(stations, function (station) {
                 return mapReceive(station);
             });
+
+            _cache.put('stations', mappedStations);
+            return mappedStations;
         });
      }
 

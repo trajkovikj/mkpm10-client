@@ -3,6 +3,7 @@
 finkipm.core.registerRepository('cityRepository',(function () {
 
     var _utils = finkipm.utils;
+    var _cache = finkipm.core.extensions.cache;
     var apiUrl = finkipm.core.config.apiUrl;
     var stationRepository = finkipm.core.getRepository('stationRepository');
     var _promiseCache = {};
@@ -32,17 +33,17 @@ finkipm.core.registerRepository('cityRepository',(function () {
             dataType : 'json'
         });
 
-        //_promiseCache[url] = _utils.object(promise);
         _promiseCache[url] = promise;
 
         return promise.then(function (response) {
             // process, map and return data
-            var cities = response.data.cities;
 
-            return _utils.linq.select(cities, function (city) {
-                return mapReceive(city);
+            var mappedCities = _utils.linq.select(response.data.cities, function (city) {
+                 return mapReceive(city);
             });
 
+            _cache.put('cities', mappedCities);
+            return mappedCities;
         });
     }
 

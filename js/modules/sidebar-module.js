@@ -7,6 +7,7 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
     var _utils = sandbox.utils;
     var _linq = sandbox.linq;
     var _cityRepository = sandbox.getRepository('cityRepository');
+    var _stationRepository = sandbox.getRepository('stationRepository');
     var _dateRepository = sandbox.getRepository('dateRepository');
     var _measurementsRepository = sandbox.getRepository('measurementsRepository');
 
@@ -151,12 +152,17 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
         var allYearsWithMonthsPromise = _dateRepository.getAllYearsWithMonths();
         var citiesPromise = _cityRepository.getAll();
+        var stationsPromise = _stationRepository.getAll();
 
         allYearsWithMonthsPromise.then(function (data) {
 
             allYearsWithMonths = data;
-            return citiesPromise;
+            return stationsPromise;
 
+        }).then(function (stations) {
+
+            return citiesPromise;
+            
         }).then(function (citiesData) {
 
             var cities = _linq.select(citiesData, function(c){
@@ -307,6 +313,9 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
 
         var timeUnitSelector = $("#sidebar").find("#radio-time-unit");
 
+        submitButton.css("background-color", "white");
+        submitButton.html("<img src='data:image/gif;base64,R0lGODlhEAAQAPIAAP///0Fp4dHa93KP6EFp4Ymi7KG1762+8SH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=='>");
+
         var request = {
             mapType : parseInt(mapTypeSelector.find("input[name=map-type]:checked").val()),
             cityId : citySelector.val(),
@@ -318,6 +327,9 @@ finkipm.core.registerModule('sidebarModule', function (sandbox) {
         };
 
         _measurementsRepository.getFiltered(request).then(function(data) {
+
+            submitButton.css("background-color", "royalblue");
+            submitButton.html("Превземи");
 
             var notification = {
                 request : request,
